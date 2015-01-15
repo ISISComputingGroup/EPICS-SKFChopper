@@ -1,47 +1,47 @@
 # ai record template for register inputs
 # offset in 16bit words
-record(ai, "$(P)SKF:SPEED") {
+record(ai, "$(P)SPEED") {
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(PORT1),0)FLOAT32_BE")
 	field(SCAN, "I/O Intr")
 }   
 
-record(longin, "$(P)SKF:YEAR") {
+record(longin, "$(P)YEAR") {
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(PORT2),0)UINT16")
 	field(SCAN, "I/O Intr")
 }   
 
-record(longin, "$(P)SKF:MONTH") {
+record(longin, "$(P)MONTH") {
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(PORT2),1)UINT16")
 	field(SCAN, "I/O Intr")
 }   
 
-record(longin, "$(P)SKF:DAY") {
+record(longin, "$(P)DAY") {
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(PORT2),2)UINT16")
 	field(SCAN, "I/O Intr")
 }   
 
-record(longin, "$(P)SKF:TIME") {
+record(longin, "$(P)TIME") {
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(PORT2),3)INT32_BE")
 	field(SCAN, "I/O Intr")
 }   
 
-record(longout, "$(P)SKF:DAY:SP") {
+record(longout, "$(P)DAY:SP") {
     field(DTYP,"asynInt32")
     field(OUT,"@asyn($(PORT2)w,0)UINT16")
 }   
 
-record(longin, "$(P)SKF:RDIR") {
+record(longin, "$(P)RDIR") {
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(PORT3),0)INT16")
 	field(SCAN, "I/O Intr")
 }   
 
-record(longout, "$(P)SKF:RDIR:SP") {
+record(longout, "$(P)RDIR:SP") {
     field(DTYP,"asynInt32")
     field(OUT,"@asyn($(PORT3)w,0)UINT16")
 }   
