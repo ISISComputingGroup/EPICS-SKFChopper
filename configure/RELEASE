@@ -47,7 +47,7 @@ MYSQL=$(SUPPORT)/MySQL
 ZLIB=$(SUPPORT)/zlib/1-2-8
 
 MODBUS=$(SUPPORT)/modbus/R2-7
-ASYN=$(SUPPORT)/asyn/4-22
+ASYN=$(SUPPORT)/asyn/4-26
 ONCRPC=$(SUPPORT)/oncrpc/2
 
 ## add other modules here ##
