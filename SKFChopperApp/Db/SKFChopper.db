@@ -2,46 +2,309 @@
 # offset in 16bit words
 record(ai, "$(P)SPEED") {
     field(DTYP,"asynFloat64")
-    field(INP,"@asyn($(PORT1),0)FLOAT32_BE")
+    field(INP,"@asyn($(SPEED_L),0)FLOAT32_LE")
 	field(SCAN, "I/O Intr")
+	field(EGU, "Hz")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:SPEED")
+    field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)YEAR") {
     field(DTYP,"asynInt32")
-    field(INP,"@asyn($(PORT2),0)UINT16")
+    field(INP,"@asyn($(TIME_L),0)UINT16")
 	field(SCAN, "I/O Intr")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:YEAR")
+    field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)MONTH") {
     field(DTYP,"asynInt32")
-    field(INP,"@asyn($(PORT2),1)UINT16")
+    field(INP,"@asyn($(TIME_L),1)UINT16")
 	field(SCAN, "I/O Intr")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MONTH")
+    field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)DAY") {
     field(DTYP,"asynInt32")
-    field(INP,"@asyn($(PORT2),2)UINT16")
+    field(INP,"@asyn($(TIME_L),2)UINT16")
 	field(SCAN, "I/O Intr")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:DAY")
+    field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)TIME") {
     field(DTYP,"asynInt32")
-    field(INP,"@asyn($(PORT2),3)INT32_BE")
+    field(INP,"@asyn($(TIME_L),3)INT32_BE")
 	field(SCAN, "I/O Intr")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:TIME")
+    field(SDIS, "$(P)DISABLE")
 }   
 
-record(longout, "$(P)DAY:SP") {
+record(longin, "$(P)DIR") {
     field(DTYP,"asynInt32")
-    field(OUT,"@asyn($(PORT2)w,0)UINT16")
-}   
-
-record(longin, "$(P)RDIR") {
-    field(DTYP,"asynInt32")
-    field(INP,"@asyn($(PORT3),0)INT16")
+    field(INP,"@asyn($(DIR_L),0)INT16")
 	field(SCAN, "I/O Intr")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:DIR")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
 }   
 
-record(longout, "$(P)RDIR:SP") {
+record(longout, "$(P)DIR:SP") {
     field(DTYP,"asynInt32")
-    field(OUT,"@asyn($(PORT3)w,0)UINT16")
+    field(OUT,"@asyn($(DIR_L)w,0)INT16")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:DIR:SP")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+} 
+
+record(ai, "$(P)FREQ") {
+    field(DTYP,"asynFloat64")
+    field(INP,"@asyn($(FREQ_L),0)FLOAT32_LE")
+	field(SCAN, "I/O Intr")
+	field(EGU, "Hz")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:FREQ")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
 }   
+
+record(ao, "$(P)FREQ:SP") {
+    field(DTYP,"asynFloat64")
+    field(OUT,"@asyn($(FREQ_L)w,0)FLOAT32_LE")
+	field(EGU, "Hz")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:FREQ:SQ")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+record(ai, "$(P)PHAS") {
+    field(DTYP,"asynFloat64")
+    field(INP,"@asyn($(PHAS_L),0)INT16")
+	field(SCAN, "I/O Intr")
+	field(EGU, "ns")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}   
+
+record(ao, "$(P)PHAS:SP") {
+    field(DTYP,"asynFloat64")
+    field(OUT,"@asyn($(PHAS_L)w,0)INT16")
+	field(EGU, "ns")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS:SP")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+record(ai, "$(P)PHAS_ERR") {
+    field(DTYP,"asynFloat64")
+    field(INP,"@asyn($(PERR_L),0)INT32_LE")
+	field(SCAN, "I/O Intr")
+	field(EGU, "ns")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS_ERR")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+record(ao, "$(P)PHAS_ERR:SP") {
+    field(DTYP,"asynFloat64")
+    field(OUT,"@asyn($(PERR_L)w,0)INT32_LE")
+	field(EGU, "ns")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS_ERR:SP")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+record(ai, "$(P)VETO") {
+    field(DTYP,"asynFloat64")
+    field(INP,"@asyn($(VETO_L),0)FLOAT32_LE")
+	field(SCAN, "I/O Intr")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:VETO")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)READY") {
+    field(DTYP,"asynFloat64")
+    field(INP,"@asyn($(READY_L),0)FLOAT32_LE")
+	field(SCAN, "I/O Intr")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:READY")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)INSYNC") {
+    field(DTYP,"asynFloat64")
+    field(INP,"@asyn($(INSYNC_L),0)FLOAT32_LE")
+	field(SCAN, "I/O Intr")
+	field(PREC, "3")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:INSYNC")
+    field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(ao, "$(P)START") {
+    field(DTYP,"asynInt32")
+    field(OUT,"@asyn($(START_L),0)UINT8")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:START")
+    field(SDIS, "$(P)DISABLE")
+}   
+
+record(ao, "$(P)STOP") {
+    field(DTYP,"asynInt32")
+    field(OUT,"@asyn($(STOP_L)w,0)UINT8")
+	field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:STOP")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(bo, "$(P)SIM")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bo, "$(P)DISABLE") 
+{
+    field(DESC, "Disable comms")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OMSL, "supervisory")
+    field(ZNAM, "COMMS ENABLED")
+    field(ONAM, "COMMS DISABLED")
+}
+
+record(ai, "$(P)SIM:SPEED")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+	field(VAL, "12321"
+}
+
+record(longin, "$(P)SIM:YEAR")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+	field(VAL, "2015"
+}
+
+record(longin, "$(P)SIM:MONTH")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+	field(VAL, "01"
+}
+
+record(longin, "$(P)SIM:DAY")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+	field(VAL, "01"
+}
+
+record(longin, "$(P)SIM:TIME")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(longin, "$(P)SIM:DIR")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+alias("$(P)SIM:DIR","$(P)SIM:DIR:SP")
+
+record(ai, "$(P)SIM:FREQ")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+alias("$(P)SIM:FREQ","$(P)SIM:FREQ:SP")
+
+record(ai, "$(P)SIM:PHAS")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+alias("$(P)SIM:PHAS","$(P)SIM:PHAS:SP")
+
+record(ai, "$(P)SIM:PHAS_ERR")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+alias("$(P)SIM:PHAS_ERR","$(P)SIM:PHAS_ERR:SP")
+
+record(ai, "$(P)SIM:VETO")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:READY")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:INSYNC")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:START")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:STOP")
+{
+	field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
