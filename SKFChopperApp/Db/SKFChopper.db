@@ -1,6 +1,7 @@
 # ai record template for register inputs
 # offset in 16bit words
 record(ai, "$(P)SPEED") {
+	field(DESC "Run Speed")
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(SPEED_L),0)FLOAT32_LE")
 	field(SCAN, "I/O Intr")
@@ -12,46 +13,56 @@ record(ai, "$(P)SPEED") {
 }   
 
 record(longin, "$(P)YEAR") {
+	field(DESC "Year in Chopper Memory")
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(TIME_L),0)UINT16")
 	field(SCAN, "I/O Intr")
+	field(EGU, "")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:YEAR")
     field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)MONTH") {
+	field(DESC "Month in Chopper Memory")
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(TIME_L),1)UINT16")
 	field(SCAN, "I/O Intr")
+	field(EGU, "")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:MONTH")
     field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)DAY") {
+	field(DESC "Day in Chopper Memory")
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(TIME_L),2)UINT16")
 	field(SCAN, "I/O Intr")
+	field(EGU, "")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:DAY")
     field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)TIME") {
+	field(DESC "Seonds since Midnight")
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(TIME_L),3)INT32_BE")
 	field(SCAN, "I/O Intr")
+	field(EGU, "")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:TIME")
     field(SDIS, "$(P)DISABLE")
 }   
 
 record(longin, "$(P)DIR") {
+	field(DESC "SPin Direction")
     field(DTYP,"asynInt32")
     field(INP,"@asyn($(DIR_L),0)INT16")
 	field(SCAN, "I/O Intr")
 	field(SIML, "$(P)SIM")
+	field(EGU, "")
     field(SIOL, "$(P)SIM:DIR")
     field(SDIS, "$(P)DISABLE")
 	info(INTEREST, "HIGH")
@@ -59,8 +70,10 @@ record(longin, "$(P)DIR") {
 }   
 
 record(longout, "$(P)DIR:SP") {
+	field(DESC "Spin Direction Readback")
     field(DTYP,"asynInt32")
     field(OUT,"@asyn($(DIR_L)w,0)INT16")
+	field(EGU, "")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:DIR:SP")
     field(SDIS, "$(P)DISABLE")
@@ -69,6 +82,7 @@ record(longout, "$(P)DIR:SP") {
 } 
 
 record(ai, "$(P)FREQ") {
+	field(DESC "Chopper Frequency")
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(FREQ_L),0)FLOAT32_LE")
 	field(SCAN, "I/O Intr")
@@ -82,6 +96,7 @@ record(ai, "$(P)FREQ") {
 }   
 
 record(ao, "$(P)FREQ:SP") {
+	field(DESC "Chopper Frequency Setpoint")
     field(DTYP,"asynFloat64")
     field(OUT,"@asyn($(FREQ_L)w,0)FLOAT32_LE")
 	field(EGU, "Hz")
@@ -94,6 +109,7 @@ record(ao, "$(P)FREQ:SP") {
 }  
 
 record(ai, "$(P)PHAS") {
+	field(DESC "Reference Delay")
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(PHAS_L),0)INT16")
 	field(SCAN, "I/O Intr")
@@ -107,6 +123,7 @@ record(ai, "$(P)PHAS") {
 }   
 
 record(ao, "$(P)PHAS:SP") {
+	field(DESC "Reference Dealy Setpoint")
     field(DTYP,"asynFloat64")
     field(OUT,"@asyn($(PHAS_L)w,0)INT16")
 	field(EGU, "ns")
@@ -119,6 +136,7 @@ record(ao, "$(P)PHAS:SP") {
 }  
 
 record(ai, "$(P)PHAS_ERR") {
+	field(DESC "Veto Window")
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(PERR_L),0)INT32_LE")
 	field(SCAN, "I/O Intr")
@@ -132,6 +150,7 @@ record(ai, "$(P)PHAS_ERR") {
 }  
 
 record(ao, "$(P)PHAS_ERR:SP") {
+	field(DESC "Veto Window Setpoint")
     field(DTYP,"asynFloat64")
     field(OUT,"@asyn($(PERR_L)w,0)INT32_LE")
 	field(EGU, "ns")
@@ -144,9 +163,11 @@ record(ao, "$(P)PHAS_ERR:SP") {
 }  
 
 record(ai, "$(P)VETO") {
+	field(DESC "Veto Counts")
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(VETO_L),0)FLOAT32_LE")
 	field(SCAN, "I/O Intr")
+	field(EGU, "")
 	field(PREC, "3")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:VETO")
@@ -156,9 +177,11 @@ record(ai, "$(P)VETO") {
 }
 
 record(ai, "$(P)READY") {
+	field(DESC "Phase OK")
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(READY_L),0)FLOAT32_LE")
 	field(SCAN, "I/O Intr")
+	field(EGU, "")
 	field(PREC, "3")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:READY")
@@ -168,9 +191,11 @@ record(ai, "$(P)READY") {
 }
 
 record(ai, "$(P)INSYNC") {
+	field(DESC "Phase Accuracy")
     field(DTYP,"asynFloat64")
     field(INP,"@asyn($(INSYNC_L),0)FLOAT32_LE")
 	field(SCAN, "I/O Intr")
+	field(EGU, "")
 	field(PREC, "3")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:INSYNC")
@@ -180,16 +205,20 @@ record(ai, "$(P)INSYNC") {
 }
 
 record(ao, "$(P)START") {
+	field(DESC "Modbus Run On")
     field(DTYP,"asynInt32")
     field(OUT,"@asyn($(START_L),0)UINT8")
+	field(EGU, "")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:START")
     field(SDIS, "$(P)DISABLE")
 }   
 
 record(ao, "$(P)STOP") {
+	field(DESC "Modbus run Off")
     field(DTYP,"asynInt32")
     field(OUT,"@asyn($(STOP_L)w,0)UINT8")
+	field(EGU, "")
 	field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:STOP")
     field(SDIS, "$(P)DISABLE")
