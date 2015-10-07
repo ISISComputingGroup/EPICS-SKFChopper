@@ -46,7 +46,7 @@ record(longin, "$(P)DAY") {
 }   
 
 record(longin, "$(P)TIME") {
-    field(DESC, "Seonds since Midnight")
+    field(DESC, "Seconds since Midnight")
     field(DTYP, "asynInt32")
     field(INP, "@asyn($(TIME_L),3)INT32_BE")
     field(SCAN, "I/O Intr")
@@ -207,7 +207,7 @@ record(ai, "$(P)INSYNC") {
 record(ao, "$(P)START") {
     field(DESC, "Modbus Run On")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(START_L),0)UINT8")
+    field(OUT, "@asyn($(START_L),0)UINT16")
     field(EGU, "")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:START")
@@ -217,7 +217,7 @@ record(ao, "$(P)START") {
 record(ao, "$(P)STOP") {
     field(DESC, "Modbus run Off")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(STOP_L)w,0)UINT8")
+    field(OUT, "@asyn($(STOP_L),0)UINT16")
     field(EGU, "")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:STOP")
@@ -234,7 +234,7 @@ record(bo, "$(P)SIM")
 
 record(bo, "$(P)DISABLE") 
 {
-    field(DESC,, "Disable comms")
+    field(DESC, "Disable comms")
     field(PINI, "YES")
     field(VAL, "0")
     field(OMSL, "supervisory")
@@ -246,28 +246,28 @@ record(ai, "$(P)SIM:SPEED")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
-    field(VAL, "12321"
+    field(VAL, "12321")
 }
 
 record(longin, "$(P)SIM:YEAR")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
-    field(VAL, "2015"
+    field(VAL, "2015")
 }
 
 record(longin, "$(P)SIM:MONTH")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
-    field(VAL, "01"
+    field(VAL, "01")
 }
 
 record(longin, "$(P)SIM:DAY")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
-    field(VAL, "01"
+    field(VAL, "01")
 }
 
 record(longin, "$(P)SIM:TIME")
