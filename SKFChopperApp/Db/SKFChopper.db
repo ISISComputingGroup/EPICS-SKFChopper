@@ -36,6 +36,10 @@ record(mbbi, "$(P)STATE") {
 	field(FVVL, 5)
 	field(SXVL, 6)
 	field(SVVL, 7)
+	field(EIVL, 8)
+	field(NIVL, 9)
+	field(TEVL, 10)
+	field(ELVL, 11)
 	field(ZRST, "Invalid")
 	field(ONST, "Power Up")
 	field(TWST, "Standby")
@@ -44,6 +48,10 @@ record(mbbi, "$(P)STATE") {
 	field(FVST, "Levitating")
 	field(SXST, "Starting")
 	field(SVST, "Stopping")
+	field(EIST, "Coast")
+	field(NIST, "Rotation")
+	field(TEST, "Levitated")
+	field(ELST, "Rotating")
     field(SDIS, "$(P)DISABLE")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
@@ -71,6 +79,33 @@ record(longin, "$(P)TIME") {
     field(SDIS, "$(P)DISABLE")
 }   
 
+record(ai, "$(P)HOMEANG") {
+    field(DESC, "Parking Angle")
+    field(DTYP, "asynFloat64")
+    field(INP, "@asyn(homeang,0)FLOAT32_LE")
+    field(SCAN, "I/O Intr")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HOMEANG")
+    field(SDIS, "$(P)DISABLE")
+    field(EGU, "degree")
+	field(PREC, 3)
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}   
+
+record(ao, "$(P)HOMEANG:SP") {
+    field(DESC, "Parking Angle Setpoint")
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn(homeangw,0)FLOAT32_LE")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:HOMEANG")
+    field(SDIS, "$(P)DISABLE")
+    field(EGU, "degree")
+	field(PREC, 3)
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+} 
+
 record(bi, "$(P)DIR") {
     field(DESC, "Spin Direction")
     field(DTYP, "asynInt32")
@@ -85,18 +120,33 @@ record(bi, "$(P)DIR") {
     info(archive, "VAL")
 }   
 
-record(bo, "$(P)DIR:SP") {
-    field(DESC, "Spin Direction Setpoint")
+# direction should not be changed
+#record(bo, "$(P)DIR:SP") {
+#    field(DESC, "Spin Direction Setpoint")
+#    field(DTYP, "asynInt32")
+#    field(OUT, "@asyn($(DIR_L)w,0)INT16")
+#    field(SIML, "$(P)SIM")
+#    field(SIOL, "$(P)SIM:DIR")
+#    field(SDIS, "$(P)DISABLE")
+#	field(ZNAM, "A")
+#	field(ONAM, "B")
+#    info(INTEREST, "HIGH")
+#    info(archive, "VAL")
+#} 
+
+# actually in .1 Hz units
+record(longin, "$(P)SPEED") {
+    field(DESC, "Rotor Speed")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(DIR_L)w,0)INT16")
+    field(INP, "@asyn(rspeed,0)UINT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "Hz")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:DIR:SP")
+    field(SIOL, "$(P)SIM:SPEED")
     field(SDIS, "$(P)DISABLE")
-	field(ZNAM, "A")
-	field(ONAM, "B")
-    info(INTEREST, "HIGH")
+    info(INTEREST, "MEDIUM")
     info(archive, "VAL")
-} 
+}   
 
 record(ai, "$(P)FREQ") {
     field(DESC, "Chopper Frequency")
@@ -119,7 +169,7 @@ record(ao, "$(P)FREQ:SP") {
     field(EGU, "Hz")
     field(PREC, "3")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:FREQ:SQ")
+    field(SIOL, "$(P)SIM:FREQ")
     field(SDIS, "$(P)DISABLE")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
@@ -144,11 +194,25 @@ record(longout, "$(P)PHAS:SP") {
     field(OUT, "@asyn($(PHAS_L)w,0)INT32_LE")
     field(EGU, "ns")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:PHAS:SP")
+    field(SIOL, "$(P)SIM:PHAS")
     field(SDIS, "$(P)DISABLE")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }  
+
+record(ai, "$(P)PHAS:DEG") {
+    field(DESC, "Reference Delay")
+    field(DTYP, "asynFloat64")
+    field(INP, "@asyn(phasd,0)FLOAT32_LE")
+    field(SCAN, "I/O Intr")
+    field(EGU, "degree")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS:DEG")
+    field(SDIS, "$(P)DISABLE")
+    field(PREC, "3")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}   
 
 record(longin, "$(P)PHAS_ERR") {
     field(DESC, "Veto Window")
@@ -169,9 +233,23 @@ record(longout, "$(P)PHAS_ERR:SP") {
     field(OUT, "@asyn($(PERR_L)w,0)INT32_LE")
     field(EGU, "ns")
     field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:PHAS_ERR:SP")
+    field(SIOL, "$(P)SIM:PHAS_ERR")
     field(SDIS, "$(P)DISABLE")
     info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+record(ai, "$(P)PHAS_ERR:DEG") {
+    field(DESC, "Veto Window")
+    field(DTYP, "asynFloat64")
+    field(INP, "@asyn(phaserrd,0)FLOAT32_LE")
+    field(SCAN, "I/O Intr")
+    field(EGU, "degree")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS_ERR:DEG")
+    field(SDIS, "$(P)DISABLE")
+    field(PREC, "3")
+    info(INTEREST, "MEDIUM")
     info(archive, "VAL")
 }  
 
@@ -289,15 +367,23 @@ record(bi, "$(P)SIM:DIR")
     field(DTYP, "Soft Channel")
 }
 
-alias("$(P)SIM:DIR", "$(P)SIM:DIR:SP")
-
 record(ai, "$(P)SIM:FREQ")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 }
 
-alias("$(P)SIM:FREQ", "$(P)SIM:FREQ:SP")
+record(ai, "$(P)SIM:HOMEANG")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(longin, "$(P)SIM:SPEED")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
 
 record(longin, "$(P)SIM:PHAS")
 {
@@ -305,7 +391,11 @@ record(longin, "$(P)SIM:PHAS")
     field(DTYP, "Soft Channel")
 }
 
-alias("$(P)SIM:PHAS", "$(P)SIM:PHAS:SP")
+record(ai, "$(P)SIM:PHAS:DEG")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
 
 record(longin, "$(P)SIM:PHAS_ERR")
 {
@@ -313,7 +403,11 @@ record(longin, "$(P)SIM:PHAS_ERR")
     field(DTYP, "Soft Channel")
 }
 
-alias("$(P)SIM:PHAS_ERR", "$(P)SIM:PHAS_ERR:SP")
+record(ai, "$(P)SIM:PHAS_ERR:DEG")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
 
 record(longin, "$(P)SIM:VETO")
 {
