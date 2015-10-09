@@ -57,6 +57,26 @@ record(mbbi, "$(P)STATE") {
     info(archive, "VAL")
 }
 
+record(mbbiDirect, "$(P)_STATUS") 
+{
+    field(DESC, "Consolidated Status Register")
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(status,0,0xFFFF)")
+    field(SCAN, "I/O Intr")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:_STATUS")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(bi, "$(P)PHASE:LCK")
+{
+    field(DESC, "Phase locked")
+    field(DTYP, "Soft Channel")
+    field(INP, "$(P)_STATUS.B5 CP")
+	field(ZNAM, "NO")
+	field(ONAM, "YES")
+} 
+
 record(longin, "$(P)DAY") {
     field(DESC, "Day in Chopper Memory")
     field(DTYP, "asynInt32")
@@ -316,6 +336,17 @@ record(bo, "$(P)STOP") {
     field(ONAM, "STOP")
 }
 
+record(bo, "$(P)RESET") {
+    field(DESC, "Modbus Clear Alarms")
+    field(DTYP, "asynInt32")
+    field(OUT, "@asyn(reset,0)UINT16")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:RESET")
+    field(SDIS, "$(P)DISABLE")
+    field(ZNAM, "")
+    field(ONAM, "RESET")
+}
+
 record(bo, "$(P)SIM")
 {
     field(SCAN, "Passive")
@@ -434,6 +465,18 @@ record(bi, "$(P)SIM:START")
 }
 
 record(bi, "$(P)SIM:STOP")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(bi, "$(P)SIM:RESET")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(mbbiDirect, "$(P)SIM:_STATUS")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
