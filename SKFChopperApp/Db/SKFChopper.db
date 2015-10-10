@@ -2,7 +2,7 @@
 record(longin, "$(P)YEAR") {
     field(DESC, "Year in Chopper Memory")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(TIME_L),0)UINT16")
+    field(INP, "@asyn($(CHOP)ctime,0)UINT16")
     field(SCAN, "I/O Intr")
     field(EGU, "")
     field(SIML, "$(P)SIM")
@@ -13,7 +13,7 @@ record(longin, "$(P)YEAR") {
 record(longin, "$(P)MONTH") {
     field(DESC, "Month in Chopper Memory")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(TIME_L),1)UINT16")
+    field(INP, "@asyn($(CHOP)ctime,1)UINT16")
     field(SCAN, "I/O Intr")
     field(EGU, "")
     field(SIML, "$(P)SIM")
@@ -24,7 +24,7 @@ record(longin, "$(P)MONTH") {
 record(mbbi, "$(P)STATE") {
     field(DESC, "System State")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(STATE_L),0)UINT16")
+    field(INP, "@asyn($(CHOP)state,0)UINT16")
     field(SCAN, "I/O Intr")
     field(SIML, "$(P)SIM")
     field(SIOL, 0)
@@ -61,14 +61,30 @@ record(mbbiDirect, "$(P)_STATUS")
 {
     field(DESC, "Consolidated Status Register")
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(status,0,0xFFFF)")
+    field(INP, "@asynMask($(CHOP)status,0,0xFFFF)")
     field(SCAN, "I/O Intr")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:_STATUS")
     field(SDIS, "$(P)DISABLE")
 }
+record(bi, "$(P)STATUS:WARN")
+{
+    field(DESC, "Warning Detected")
+    field(DTYP, "Soft Channel")
+    field(INP, "$(P)_STATUS.B0 CP")
+	field(ZNAM, "NO")
+	field(ONAM, "YES")
+} 
+record(bi, "$(P)STATUS:TRIP")
+{
+    field(DESC, "Trip Detected")
+    field(DTYP, "Soft Channel")
+    field(INP, "$(P)_STATUS.B1 CP")
+	field(ZNAM, "NO")
+	field(ONAM, "YES")
+} 
 
-record(bi, "$(P)PHASE:LCK")
+record(bi, "$(P)PHAS:LCK")
 {
     field(DESC, "Phase locked")
     field(DTYP, "Soft Channel")
@@ -80,7 +96,7 @@ record(bi, "$(P)PHASE:LCK")
 record(longin, "$(P)DAY") {
     field(DESC, "Day in Chopper Memory")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(TIME_L),2)UINT16")
+    field(INP, "@asyn($(CHOP)ctime,2)UINT16")
     field(SCAN, "I/O Intr")
     field(EGU, "")
     field(SIML, "$(P)SIM")
@@ -91,7 +107,7 @@ record(longin, "$(P)DAY") {
 record(longin, "$(P)TIME") {
     field(DESC, "Seconds since Midnight")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(TIME_L),3)INT32_BE")
+    field(INP, "@asyn($(CHOP)ctime,3)INT32_BE")
     field(SCAN, "I/O Intr")
     field(EGU, "s")
     field(SIML, "$(P)SIM")
@@ -99,10 +115,24 @@ record(longin, "$(P)TIME") {
     field(SDIS, "$(P)DISABLE")
 }   
 
-record(ai, "$(P)HOMEANG") {
-    field(DESC, "Parking Angle")
+# 1/100 of a degree
+record(longin, "$(P)HOMEANG") {
+    field(DESC, "Home Angle")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)homeang,0)UINT16")
+    field(SCAN, "I/O Intr")
+    field(SIML, "$(P)SIM")
+#    field(SIOL, "$(P)SIM:HOMEANG")
+    field(SDIS, "$(P)DISABLE")
+    field(EGU, "degree")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}   
+
+record(ai, "$(P)HOMEANG:SP:RBV") {
+    field(DESC, "Home Angle setpoint readback")
     field(DTYP, "asynFloat64")
-    field(INP, "@asyn(homeang,0)FLOAT32_LE")
+    field(INP, "@asyn($(CHOP)homeangsp,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HOMEANG")
@@ -116,7 +146,7 @@ record(ai, "$(P)HOMEANG") {
 record(ao, "$(P)HOMEANG:SP") {
     field(DESC, "Parking Angle Setpoint")
     field(DTYP, "asynFloat64")
-    field(OUT, "@asyn(homeangw,0)FLOAT32_LE")
+    field(OUT, "@asyn($(CHOP)homeangspw,0)FLOAT32_LE")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:HOMEANG")
     field(SDIS, "$(P)DISABLE")
@@ -129,7 +159,7 @@ record(ao, "$(P)HOMEANG:SP") {
 record(bi, "$(P)DIR") {
     field(DESC, "Spin Direction")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(DIR_L),0)INT16")
+    field(INP, "@asyn($(CHOP)rdir,0)INT16")
     field(SCAN, "I/O Intr")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:DIR")
@@ -144,7 +174,7 @@ record(bi, "$(P)DIR") {
 #record(bo, "$(P)DIR:SP") {
 #    field(DESC, "Spin Direction Setpoint")
 #    field(DTYP, "asynInt32")
-#    field(OUT, "@asyn($(DIR_L)w,0)INT16")
+#    field(OUT, "@asyn($(CHOP)rdirw,0)INT16")
 #    field(SIML, "$(P)SIM")
 #    field(SIOL, "$(P)SIM:DIR")
 #    field(SDIS, "$(P)DISABLE")
@@ -158,7 +188,7 @@ record(bi, "$(P)DIR") {
 record(longin, "$(P)SPEED") {
     field(DESC, "Rotor Speed")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn(rspeed,0)UINT16")
+    field(INP, "@asyn($(CHOP)rspeed,0)UINT16")
     field(SCAN, "I/O Intr")
     field(EGU, "Hz")
     field(SIML, "$(P)SIM")
@@ -171,7 +201,7 @@ record(longin, "$(P)SPEED") {
 record(ai, "$(P)FREQ") {
     field(DESC, "Chopper Frequency")
     field(DTYP, "asynFloat64")
-    field(INP, "@asyn($(FREQ_L),0)FLOAT32_LE")
+    field(INP, "@asyn($(CHOP)freq,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "Hz")
     field(PREC, "3")
@@ -185,7 +215,7 @@ record(ai, "$(P)FREQ") {
 record(ao, "$(P)FREQ:SP") {
     field(DESC, "Chopper Frequency Setpoint")
     field(DTYP, "asynFloat64")
-    field(OUT, "@asyn($(FREQ_L)w,0)FLOAT32_LE")
+    field(OUT, "@asyn($(CHOP)freqw,0)FLOAT32_LE")
     field(EGU, "Hz")
     field(PREC, "3")
     field(SIML, "$(P)SIM")
@@ -196,9 +226,9 @@ record(ao, "$(P)FREQ:SP") {
 }  
 
 record(longin, "$(P)PHAS") {
-    field(DESC, "Reference Delay")
+    field(DESC, "Reference Delay (ns)")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(PHAS_L),0)INT32_LE")
+    field(INP, "@asyn($(CHOP)phas,0)INT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "ns")
     field(SIML, "$(P)SIM")
@@ -209,9 +239,9 @@ record(longin, "$(P)PHAS") {
 }   
 
 record(longout, "$(P)PHAS:SP") {
-    field(DESC, "Reference Dealy Setpoint")
+    field(DESC, "Reference Delay Setpoint (ns)")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(PHAS_L)w,0)INT32_LE")
+    field(OUT, "@asyn($(CHOP)phasw,0)INT32_LE")
     field(EGU, "ns")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:PHAS")
@@ -221,9 +251,9 @@ record(longout, "$(P)PHAS:SP") {
 }  
 
 record(ai, "$(P)PHAS:DEG") {
-    field(DESC, "Reference Delay")
+    field(DESC, "Reference Delay (deg)")
     field(DTYP, "asynFloat64")
-    field(INP, "@asyn(phasd,0)FLOAT32_LE")
+    field(INP, "@asyn($(CHOP)phasd,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "degree")
     field(SIML, "$(P)SIM")
@@ -234,10 +264,24 @@ record(ai, "$(P)PHAS:DEG") {
     info(archive, "VAL")
 }   
 
+record(ao, "$(P)PHAS:DEG:SP") {
+    field(DESC, "Reference Delay Setpoint (deg)")
+    field(DTYP, "asynFloat64")
+    field(OUT, "@asyn($(CHOP)phasdw,0)FLOAT32_LE")
+    field(EGU, "degree")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS:DEG")
+    field(SDIS, "$(P)DISABLE")
+    field(PREC, "3")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}   
+
+
 record(longin, "$(P)PHAS_ERR") {
     field(DESC, "Veto Window")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(PERR_L),0)INT32_LE")
+    field(INP, "@asyn($(CHOP)phaserr,0)INT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "ns")
     field(SIML, "$(P)SIM")
@@ -250,7 +294,7 @@ record(longin, "$(P)PHAS_ERR") {
 record(longout, "$(P)PHAS_ERR:SP") {
     field(DESC, "Veto Window Setpoint")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(PERR_L)w,0)INT32_LE")
+    field(OUT, "@asyn($(CHOP)phaserrw,0)INT32_LE")
     field(EGU, "ns")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:PHAS_ERR")
@@ -262,7 +306,7 @@ record(longout, "$(P)PHAS_ERR:SP") {
 record(ai, "$(P)PHAS_ERR:DEG") {
     field(DESC, "Veto Window")
     field(DTYP, "asynFloat64")
-    field(INP, "@asyn(phaserrd,0)FLOAT32_LE")
+    field(INP, "@asyn($(CHOP)phaserrd,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "degree")
     field(SIML, "$(P)SIM")
@@ -276,7 +320,7 @@ record(ai, "$(P)PHAS_ERR:DEG") {
 record(longin, "$(P)VETO") {
     field(DESC, "Veto Counts")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(VETO_L),0)INT32_LE")
+    field(INP, "@asyn($(CHOP)veto,0)INT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "count")
     field(SIML, "$(P)SIM")
@@ -289,7 +333,7 @@ record(longin, "$(P)VETO") {
 record(ai, "$(P)READY") {
     field(DESC, "Phase OK")
     field(DTYP, "asynFloat64")
-    field(INP, "@asyn($(READY_L),0)FLOAT32_LE")
+    field(INP, "@asyn($(CHOP)ready,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "%")
     field(PREC, "3")
@@ -303,7 +347,7 @@ record(ai, "$(P)READY") {
 record(ai, "$(P)INSYNC") {
     field(DESC, "Phase Accuracy")
     field(DTYP, "asynFloat64")
-    field(INP, "@asyn($(INSYNC_L),0)FLOAT32_LE")
+    field(INP, "@asyn($(CHOP)insync,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "s")
     field(PREC, "3")
@@ -317,7 +361,7 @@ record(ai, "$(P)INSYNC") {
 record(bo, "$(P)START") {
     field(DESC, "Modbus Run On")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(START_L),0)UINT16")
+    field(OUT, "@asyn($(CHOP)start,0)UINT16")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:START")
     field(SDIS, "$(P)DISABLE")
@@ -328,7 +372,7 @@ record(bo, "$(P)START") {
 record(bo, "$(P)STOP") {
     field(DESC, "Modbus run Off")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(STOP_L),0)UINT16")
+    field(OUT, "@asyn($(CHOP)stop,0)UINT16")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:STOP")
     field(SDIS, "$(P)DISABLE")
@@ -339,7 +383,7 @@ record(bo, "$(P)STOP") {
 record(bo, "$(P)RESET") {
     field(DESC, "Modbus Clear Alarms")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn(reset,0)UINT16")
+    field(OUT, "@asyn($(CHOP)reset,0)UINT16")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:RESET")
     field(SDIS, "$(P)DISABLE")
