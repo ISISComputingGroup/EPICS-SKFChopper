@@ -1,25 +1,18 @@
+# DB file for SKF Magnetic Bearing Controller MB4160g5-PC
 
-record(longin, "$(P)YEAR") {
-    field(DESC, "Year in Chopper Memory")
-    field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)ctime,0)UINT16")
-    field(SCAN, "I/O Intr")
-    field(EGU, "")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:YEAR")
-    field(SDIS, "$(P)DISABLE")
-}   
+#--------------------------------------------------
+# Name
 
-record(longin, "$(P)MONTH") {
-    field(DESC, "Month in Chopper Memory")
-    field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)ctime,1)UINT16")
-    field(SCAN, "I/O Intr")
-    field(EGU, "")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:MONTH")
-    field(SDIS, "$(P)DISABLE")
-}   
+record(stringout, "$(P)NAME") {
+    field(DESC, "Name of Chopper (or which disk the controller is attached to)")
+    field(DTYP, "Soft Channel")
+    field(VAL, "$(NAME)")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+#--------------------------------------------------
+# State
 
 record(mbbi, "$(P)STATE") {
     field(DESC, "System State")
@@ -43,7 +36,7 @@ record(mbbi, "$(P)STATE") {
 	field(ZRST, "Invalid")
 	field(ONST, "Power Up")
 	field(TWST, "Standby")
-	field(THST, "Idle")
+	field(THST, "Idle")     
 	field(FRST, "Deleving")
 	field(FVST, "Levitating")
 	field(SXST, "Starting")
@@ -57,8 +50,10 @@ record(mbbi, "$(P)STATE") {
     info(archive, "VAL")
 }
 
-record(mbbiDirect, "$(P)_STATUS") 
-{
+#--------------------------------------------------
+# Status Register
+
+record(mbbiDirect, "$(P)_STATUS") {
     field(DESC, "Consolidated Status Register")
     field(DTYP, "asynUInt32Digital")
     field(INP, "@asynMask($(CHOP)status,0,0xFFFF)")
@@ -66,68 +61,71 @@ record(mbbiDirect, "$(P)_STATUS")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:_STATUS")
     field(SDIS, "$(P)DISABLE")
+	info(INTEREST, "LOW")
+    info(archive, "VAL")    
 }
-record(bi, "$(P)STATUS:WARN")
-{
+
+record(bi, "$(P)STATUS:WARN") {
     field(DESC, "Warning Detected")
     field(DTYP, "Soft Channel")
     field(INP, "$(P)_STATUS.B0 CP")
 	field(ZNAM, "NO")
 	field(ONAM, "YES")
-} 
-record(bi, "$(P)STATUS:TRIP")
-{
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+ 
+record(bi, "$(P)STATUS:TRIP") {
     field(DESC, "Trip Detected")
     field(DTYP, "Soft Channel")
     field(INP, "$(P)_STATUS.B1 CP")
 	field(ZNAM, "NO")
 	field(ONAM, "YES")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
 } 
 
-record(bi, "$(P)PHAS:LCK")
-{
+record(bi, "$(P)PHAS:LOCK") {
     field(DESC, "Phase locked")
     field(DTYP, "Soft Channel")
     field(INP, "$(P)_STATUS.B5 CP")
 	field(ZNAM, "NO")
 	field(ONAM, "YES")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
 } 
 
-record(longin, "$(P)DAY") {
-    field(DESC, "Day in Chopper Memory")
-    field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)ctime,2)UINT16")
-    field(SCAN, "I/O Intr")
-    field(EGU, "")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:DAY")
-    field(SDIS, "$(P)DISABLE")
-}   
-
-record(longin, "$(P)TIME") {
-    field(DESC, "Seconds since Midnight")
-    field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)ctime,3)INT32_BE")
-    field(SCAN, "I/O Intr")
-    field(EGU, "s")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:TIME")
-    field(SDIS, "$(P)DISABLE")
-}   
+#--------------------------------------------------
+# Shaft Angle
 
 # 1/100 of a degree
-record(longin, "$(P)HOMEANG") {
-    field(DESC, "Home Angle")
+record(longin, "$(P)_SHAFTANG100") {
+    field(DESC, "Shaft Angle in hundredths of degrees")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)homeang,0)UINT16")
+    field(INP, "@asyn($(CHOP)shaftang,0)UINT16")
     field(SCAN, "I/O Intr")
     field(SIML, "$(P)SIM")
-#    field(SIOL, "$(P)SIM:HOMEANG")
+#    field(SIOL, "$(P)SIM:SHAFTANG")
     field(SDIS, "$(P)DISABLE")
     field(EGU, "degree")
-    info(INTEREST, "MEDIUM")
+    field(FLNK, "$(P)SHAFTANG")
+    info(INTEREST, "LOW")
     info(archive, "VAL")
-}   
+}
+
+record(calc, "$(P)SHAFTANG") {
+	field(DESC, "Shaft Angle")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)_SHAFTANG100")
+	field(CALC, "(A / 100)")
+    field(PREC, 2)
+    field(EGU, "degree")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+#--------------------------------------------------
+# Homing
 
 record(ai, "$(P)HOMEANG:SP:RBV") {
     field(DESC, "Home Angle setpoint readback")
@@ -144,7 +142,7 @@ record(ai, "$(P)HOMEANG:SP:RBV") {
 }   
 
 record(ao, "$(P)HOMEANG:SP") {
-    field(DESC, "Parking Angle Setpoint")
+    field(DESC, "Home Angle Setpoint")
     field(DTYP, "asynFloat64")
     field(OUT, "@asyn($(CHOP)homeangspw,0)FLOAT32_LE")
     field(SIML, "$(P)SIM")
@@ -156,6 +154,223 @@ record(ao, "$(P)HOMEANG:SP") {
     info(archive, "VAL")
 } 
 
+#--------------------------------------------------
+# Parking
+
+# When OK to park (i.e. only determine parked position when stopped)
+# Read shaft angle
+# Compare with both raw OPEN and CLOSED positions
+# Set output value accordingly (OPEN,CLOSED,UNKNOWN)
+
+# If PARK:OK = 1
+#   If ( OPEN-1 < SHAFTANGLE < OPEN+1 )
+#       Set PARK:POSN = OPEN
+#   ElseIf ( CLOSED-1 < SHAFTANGLE < CLOSED+1 )
+#       Set PARK:POSN = CLOSED
+#   Else
+#       Set PARK:POSN = UNKNOWN
+#   Endif
+# Endif
+
+# Original version of calculation.  Doesn't take into account "wrapping" of angles around 0 deg.
+#record(calc, "$(P)PARK:POSN:CALC") {
+#    field(DESC, "Calculate parked position")
+#    field(SCAN, "Passive")
+#    field(INPA, "$(P)SHAFTANG CP")
+#    field(INPB, "$(P)PARK:POSN:SP.ZRVL")
+#    field(INPC, "$(P)PARK:POSN:SP.ONVL")
+#    field(CALC, "(A>B-1 && A<B+1)?0:((A>C-1 && A<C+1)?1:2)")
+#   field(FLNK, "$(P)PARK:POSN:FWD")
+#    info(INTEREST, "LOW")
+##    info(archive, "VAL")
+#}
+
+# Shaftangle is in the range 0-360 deg.
+# Formula for minimum distance between two angles is:
+# delta_temp = abs(alpha - beta) % 360
+# If (delta_temp > 180)
+#	delta_final = 360 - delta_temp
+# Else
+# 	delta_final = delta_temp
+# Endif
+
+# This dfanout makes absolutely sure that the calc
+# records are working on the same value of SHAFTANG
+record(dfanout, "$(P)SHAFTANG:FAN") {
+	field(OMSL, "closed_loop")
+	field(DOL, "$(P)SHAFTANG CP")
+	field(OUTA, "$(P)SHAFTANG:DIFF:OPN1.A PP")
+	field(OUTB, "$(P)SHAFTANG:DIFF:CLS1.A PP")
+	field(FLNK, "$(P)PARK:POSN:CALC")
+}
+
+# CALC multiplies/divides by 1000 not to lose decimals of difference
+record(calcout, "$(P)SHAFTANG:DIFF:OPN1") {
+	field(DESC, "Diff to OPEN pos - part 1")
+	field(INPB, "$(P)PARK:POSN:SP.ZRVL")
+	field(CALC, "((ABS(A-B)*1000)%(360*1000))/1000")
+	field(OUT, "$(P)SHAFTANG:DIFF:OPN.A PP")
+}
+
+record(calc, "$(P)SHAFTANG:DIFF:OPN") {
+	field(DESC, "Diff to OPEN pos - part 2")
+	field(CALC, "A>180 ? 360-A : A")
+}
+
+# CALC multiplies/divides by 1000 not to lose decimals of difference
+record(calcout, "$(P)SHAFTANG:DIFF:CLS1") {
+	field(DESC, "Diff to CLOSED pos - part 1")
+	field(INPB, "$(P)PARK:POSN:SP.ONVL")
+	field(CALC, "((ABS(A-B)*1000)%(360*1000))/1000")
+	field(OUT, "$(P)SHAFTANG:DIFF:CLS.A PP")
+}
+
+record(calc, "$(P)SHAFTANG:DIFF:CLS") {
+	field(DESC, "Diff to CLOSED pos - part 2")
+	field(CALC, "A>180 ? 360-A : A")
+}
+
+# CALC actually calculates where shaft is
+record(calc, "$(P)PARK:POSN:CALC") {
+    field(DESC, "Calculate parked position")
+    field(SCAN, "Passive")
+    field(INPA, "$(P)SHAFTANG:DIFF:OPN")
+    field(INPB, "$(P)SHAFTANG:DIFF:CLS")
+	field(CALC, "A<1 ? 0 :(B<1 ? 1 : 2)")
+    field(FLNK, "$(P)PARK:POSN:FWD")
+    info(INTEREST, "LOW")
+#    info(archive, "VAL")
+}
+
+record(calcout, "$(P)PARK:POSN:FWD") {
+    field(DESC, "Decide if parked position relevant")
+    field(SCAN, "Passive")
+    field(INPA, "$(P)PARK:OK")
+    field(INPB, "$(P)PARK:POSN:CALC")
+    field(CALC, "A")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use OCAL")
+    field(OCAL, "B")
+    field(OUT, "$(P)PARK:POSN PP")
+    info(INTEREST, "LOW")
+#    info(archive, "VAL")    
+}
+
+record(mbbi, "$(P)PARK:POSN") {
+    field(DESC, "Parked Position")
+    field(SCAN, "Passive")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(ZRST, "OPEN")
+    field(ONST, "CLOSED")
+    field(TWST, "UNKNOWN")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(mbbo, "$(P)PARK:POSN:SP") {
+    field(DESC, "Parking Position Setpoint")
+    field(DTYP, "Soft Channel")
+    field(ZRST, "OPEN")
+	field(ONST, "CLOSED")
+	field(ZRVL, "$(OPEN)")
+	field(ONVL, "$(CLOSED)")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+} 
+
+# "OK to park" indicator.
+# If state "idle" or "levitated" and frequency 0, set output to 1 (OK to park)
+# Otherwise output is 0 (NOT OK to park).
+# Provides value for OPI to display to user or (en/dis)able park buttons
+record(calc, "$(P)PARK:OK") {
+	field(DESC, "OK to Park")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)STATE.RVAL CP")
+    field(INPB, "$(P)FREQ CP")
+# Following two lines include calculation to check whether or not shaft has settled at initial park position of 330deg
+#    field(INPC, "$(P)SHAFTANG CP")
+#    field(CALC, "(A==10) && (B==0) && (ABS(C-330) < 1) ? 1 : 0")
+    field(CALC, "(A==3 || A==10) && (B==0) ? 1 : 0")    
+# Following fields not applicable to CALC record (See comment above for explanation of values)
+#    field(ZNAM, "NO")
+#    field(ONAM, "YES")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(calcout, "$(P)PARK") {
+	field(DESC, "Park chopper OPEN or CLOSED (if PARK:OK true)")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)PARK:OK")
+    field(INPB, "$(P)PARK:POSN:SP.RVAL")
+	field(CALC, "A = 1 ? 1 : 0")
+	field(OCAL, "B")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use OCAL")
+    field(OUT, "$(P)HOMEANG:SP PP")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}
+
+record(seq, "$(P)PARK_OPEN") {
+	field(DESC, "Park OPEN sequence")
+	field(DO1, "$(OPEN)")
+	field(LNK1, "$(P)PARK:POSN:SP.RVAL PP")
+	field(DLY2, "0.5")
+	field(DO2, "1")
+	field(LNK2, "$(P)PARK.PROC")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(seq, "$(P)PARK_CLOSED") {
+	field(DESC, "Park CLOSED sequence")
+	field(DO1, "$(CLOSED)")
+	field(LNK1, "$(P)PARK:POSN:SP.RVAL PP")
+	field(DLY2, "0.5")
+	field(DO2, "1")
+	field(LNK2, "$(P)PARK.PROC")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+# T0 chopper custom parking sequences:
+
+record(seq, "$(P)PARK_OPEN_T0") {
+	field(DESC, "Park OPEN sequence for T0")
+	field(DLY1, "0")
+    field(DO1, "1")
+	field(LNK1, "$(P)STOP_IDLE.PROC")
+    field(DLY2, "1.0")
+    field(DO2, "$(OPEN)")
+	field(LNK2, "$(P)PARK:POSN:SP.RVAL PP")
+	field(DLY3, "0.5")
+	field(DO3, "1")
+	field(LNK3, "$(P)PARK.PROC")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(seq, "$(P)PARK_CLOSED_T0") {
+	field(DESC, "Park CLOSED sequence for T0")
+    field(DLY1, "0")
+    field(DO1, "1")
+	field(LNK1, "$(P)STOP_IDLE.PROC")
+    field(DLY2, "1.0")
+    field(DO2, "$(CLOSED)")
+	field(LNK2, "$(P)PARK:POSN:SP.RVAL PP")
+	field(DLY3, "0.5")
+	field(DO3, "1")
+	field(LNK3, "$(P)PARK.PROC")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}	
+
+#--------------------------------------------------
+# Direction
+
 record(bi, "$(P)DIR") {
     field(DESC, "Spin Direction")
     field(DTYP, "asynInt32")
@@ -164,8 +379,8 @@ record(bi, "$(P)DIR") {
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:DIR")
     field(SDIS, "$(P)DISABLE")
-	field(ZNAM, "A")
-	field(ONAM, "B")
+	field(ZNAM, "CW")
+	field(ONAM, "CCW")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }   
@@ -178,11 +393,14 @@ record(bi, "$(P)DIR") {
 #    field(SIML, "$(P)SIM")
 #    field(SIOL, "$(P)SIM:DIR")
 #    field(SDIS, "$(P)DISABLE")
-#	field(ZNAM, "A")
-#	field(ONAM, "B")
+#	field(ZNAM, "CW")
+#	field(ONAM, "CCW")
 #    info(INTEREST, "HIGH")
 #    info(archive, "VAL")
 #} 
+
+#--------------------------------------------------
+# Frequency and Speed
 
 # actually in .1 Hz units
 record(longin, "$(P)SPEED") {
@@ -225,7 +443,11 @@ record(ao, "$(P)FREQ:SP") {
     info(archive, "VAL")
 }  
 
-record(longin, "$(P)PHAS") {
+#--------------------------------------------------
+# Phase (delay)
+
+# Phase returned in nanoseconds
+record(longin, "$(P)_PHASNS") {
     field(DESC, "Reference Delay (ns)")
     field(DTYP, "asynInt32")
     field(INP, "@asyn($(CHOP)phas,0)INT32_LE")
@@ -234,14 +456,114 @@ record(longin, "$(P)PHAS") {
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:PHAS")
     field(SDIS, "$(P)DISABLE")
+    field(FLNK, "$(P)PHAS")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}   
+
+# Convert phase to microseconds and add "Phase Accuracy"
+# for true representation of current Phase
+record(calc, "$(P)PHAS") {
+	field(DESC, "Reference Delay + Accuracy (us)")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)_PHASNS")
+    field(INPB, "$(P)PHASE_ACC")
+	field(CALC, "(A / 1000) + B")
+    field(PREC, 3)
+    field(EGU, "us")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(longout, "$(P)PHAS:SP") {
+    field(DTYP, "Soft Channel")
+    field(DESC, "Reference Delay Setpoint (us)")
+    field(EGU, "us")
+    field(FLNK, "$(P)_PHASCALC:SP")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+# Convert phase setpoint to nanoseconds then pass to write PV
+record(calcout, "$(P)_PHASCALC:SP") {
+	field(DESC, "Reference Delay (us)")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)PHAS:SP")
+	field(CALC, "(A * 1000)")
+    field(PREC, 0)
+    field(EGU, "us")
+    field(OUT, "$(P)_PHASNS:SP.VAL PP")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# Write phase in nanoseconds
+record(longout, "$(P)_PHASNS:SP") {
+    field(DESC, "Reference Delay Setpoint (ns) (hardware)")
+    field(DTYP, "asynInt32")
+    field(OUT, "@asyn($(CHOP)phasw,0)INT32_LE")
+    field(EGU, "ns")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+# Phase Error returned in nanoseconds
+record(longin, "$(P)_PHAS_ERRNS") {
+    field(DESC, "Veto Window (ns)")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)phaserr,0)INT32_LE")
+    field(SCAN, "I/O Intr")
+    field(EGU, "ns")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHAS")
+    field(SDIS, "$(P)DISABLE")
+    field(FLNK, "$(P)PHAS_ERR")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }   
 
-record(longout, "$(P)PHAS:SP") {
-    field(DESC, "Reference Delay Setpoint (ns)")
+# Convert phase error to microseconds
+record(calc, "$(P)PHAS_ERR") {
+	field(DESC, "Veto Window (us)")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)_PHAS_ERRNS")
+	field(CALC, "(A / 1000)")
+    field(PREC, 3)
+    field(EGU, "us")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+record(longout, "$(P)PHAS_ERR:SP") {
+    field(DESC, "Veto Window Setpoint (us)")
+    field(DTYP, "Soft Channel")
+    field(EGU, "us")
+    field(FLNK, "$(P)_PHAS_ERRCALC:SP")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}  
+
+# Convert phase error setpoint to nanoseconds then pass to write PV
+record(calcout, "$(P)_PHAS_ERRCALC:SP") {
+	field(DESC, "Veto Window (us)")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)PHAS_ERR:SP")
+	field(CALC, "(A * 1000)")
+    field(PREC, 3)
+    field(EGU, "us")
+    field(OUT, "$(P)_PHAS_ERRNS:SP.VAL PP")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# Write phase in nanoseconds
+record(longout, "$(P)_PHAS_ERRNS:SP") {
+    field(DESC, "Veto Window Setpoint (ns) (hardware)")
     field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(CHOP)phasw,0)INT32_LE")
+    field(OUT, "@asyn($(CHOP)phaserrw,0)INT32_LE")
     field(EGU, "ns")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:PHAS")
@@ -277,34 +599,8 @@ record(ao, "$(P)PHAS:DEG:SP") {
     info(archive, "VAL")
 }   
 
-
-record(longin, "$(P)PHAS_ERR") {
-    field(DESC, "Veto Window")
-    field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)phaserr,0)INT32_LE")
-    field(SCAN, "I/O Intr")
-    field(EGU, "ns")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:PHAS_ERR")
-    field(SDIS, "$(P)DISABLE")
-    info(INTEREST, "HIGH")
-    info(archive, "VAL")
-}  
-
-record(longout, "$(P)PHAS_ERR:SP") {
-    field(DESC, "Veto Window Setpoint")
-    field(DTYP, "asynInt32")
-    field(OUT, "@asyn($(CHOP)phaserrw,0)INT32_LE")
-    field(EGU, "ns")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:PHAS_ERR")
-    field(SDIS, "$(P)DISABLE")
-    info(INTEREST, "HIGH")
-    info(archive, "VAL")
-}  
-
 record(ai, "$(P)PHAS_ERR:DEG") {
-    field(DESC, "Veto Window")
+    field(DESC, "Veto Window (deg)")
     field(DTYP, "asynFloat64")
     field(INP, "@asyn($(CHOP)phaserrd,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
@@ -317,10 +613,107 @@ record(ai, "$(P)PHAS_ERR:DEG") {
     info(archive, "VAL")
 }  
 
-record(longin, "$(P)VETO") {
+record(ai, "$(P)PHASE_OK") {
+    field(DESC, "Phase OK (%)")
+    field(DTYP, "asynFloat64")
+    field(INP, "@asyn($(CHOP)phaseok,0)FLOAT32_LE")
+    field(SCAN, "I/O Intr")
+    field(EGU, "%")
+    field(PREC, "3")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHASE_OK")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+# Phase Accuracy in seconds
+record(ai, "$(P)_PHASE_ACC_S") {
+    field(DESC, "Phase Accuracy (s)")
+    field(DTYP, "asynFloat64")
+    field(INP, "@asyn($(CHOP)phaseacc,0)FLOAT32_LE")
+    field(SCAN, "I/O Intr")
+    field(EGU, "s")
+    field(PREC, "3")
+    field(FLNK, "$(P)PHASE_ACC")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHASE_ACC")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# Convert Phase Accuracy to microseconds
+record(calc, "$(P)PHASE_ACC") {
+	field(DESC, "Phase Accuracy (us)")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)_PHASE_ACC_S")
+	field(CALC, "(A * 1000000)")
+    field(PREC, 3)
+    field(EGU, "us")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+# Phase Repeatability in seconds
+record(ai, "$(P)_PHASE_REP_S") {
+    field(DESC, "Phase Repeatability (s)")
+    field(DTYP, "asynFloat64")
+    field(INP, "@asyn($(CHOP)phaserep,0)FLOAT32_LE")
+    field(SCAN, "I/O Intr")
+    field(EGU, "s")
+    field(PREC, "3")
+    field(FLNK, "$(P)PHASE_REP")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:PHASE_REP")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# Convert Phase Repeatability to microseconds
+record(calc, "$(P)PHASE_REP") {
+	field(DESC, "Phase Accuracy (us)")
+    field(SCAN, "Passive")
+	field(INPA, "$(P)_PHASE_REP_S")
+	field(CALC, "(A * 1000000)")
+    field(PREC, 3)
+    field(EGU, "us")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+}
+
+#--------------------------------------------------
+# Ready
+
+# Provides binary READY indicator based on state of controller.
+# If at least "Idle", then classed as ready to run.
+record(calcout, "$(P)_READY:CALC") {
+	field(DESC, "Controller Ready State Calculation")
+    field(SCAN, ".1 second")
+	field(INPA, "$(P)STATE.RVAL")
+	field(CALC, "(A >= 3)")
+    field(OUT, "$(P)READY PP")
+    info(INTEREST, "MEDIUM")
+    info(archive, "VAL")
+}
+
+record(bi, "$(P)READY") {
+    field(DESC, "Controller Ready")
+    field(DTYP, "Soft Channel")
+    field(ZNAM, "NO")
+	field(ONAM, "YES")
+    info(INTEREST, "HIGH")
+    info(archive, "VAL")
+} 
+
+#--------------------------------------------------
+# Veto
+
+record(longin, "$(P)VETO:COUNTS") {
     field(DESC, "Veto Counts")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)veto,0)INT32_LE")
+    field(INP, "@asyn($(CHOP)vetocts,0)INT32_LE")
     field(SCAN, "I/O Intr")
     field(EGU, "count")
     field(SIML, "$(P)SIM")
@@ -330,36 +723,55 @@ record(longin, "$(P)VETO") {
     info(archive, "VAL")
 }
 
-record(ai, "$(P)READY") {
-    field(DESC, "Phase OK")
-    field(DTYP, "asynFloat64")
-    field(INP, "@asyn($(CHOP)ready,0)FLOAT32_LE")
-    field(SCAN, "I/O Intr")
-    field(EGU, "%")
-    field(PREC, "3")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:READY")
-    field(SDIS, "$(P)DISABLE")
-    info(INTEREST, "HIGH")
-    info(archive, "VAL")
+record(longin, "$(P)_VETO:COUNTS:PREV") {
+   field(DESC, "Previous value of veto counts")
+   field(INP, "$(P)_VETO:CALC.A")
+   field(EGU, "count")
+   info(INTEREST, "LOW")
+   info(archive, "VAL")
 }
 
-record(ai, "$(P)INSYNC") {
-    field(DESC, "Phase Accuracy")
-    field(DTYP, "asynFloat64")
-    field(INP, "@asyn($(CHOP)insync,0)FLOAT32_LE")
-    field(SCAN, "I/O Intr")
-    field(EGU, "s")
-    field(PREC, "3")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:INSYNC")
-    field(SDIS, "$(P)DISABLE")
-    info(INTEREST, "HIGH")
-    info(archive, "VAL")
+record(calcout, "$(P)_VETO:CALC") {
+   field(DESC, "Compares current with previous VETO:COUNTS value")
+   field(SCAN, ".5 second")
+   field(INPA, "$(P)VETO:COUNTS")
+   field(INPB, "$(P)_VETO:COUNTS:PREV")
+   field(CALC, "A > B")
+   field(OUT, "$(P)VETO PP")
+   field(FLNK, "$(P)_VETO:COUNTS:PREV")
+   info(INTEREST, "LOW")
+   info(archive, "VAL")
 }
 
-record(bo, "$(P)START") {
-    field(DESC, "Modbus Run On")
+record(bi, "$(P)VETO") {
+   field(DESC, "Indicates VETO:COUNTS increasing or not")
+   field(DTYP, "Soft Channel")
+   field(ZNAM, "NOT INCREASING")
+   field(ONAM, "INCREASING")
+   info(INTEREST, "HIGH")
+   info(archive, "VAL")
+}
+
+#--------------------------------------------------
+# Control
+
+# Start command sequence 
+record(seq, "$(P)START") {
+	field(DESC, "Chopper start sequence")
+	field(DO1, "0")
+	field(LNK1, "$(P)START_CMD PP")
+	field(DLY2, "0.5")
+	field(DO2, "1")
+	field(LNK2, "$(P)START_CMD PP")
+	field(DLY3, "0.5")
+	field(DO3, "0")
+	field(LNK3, "$(P)START_CMD PP")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")    
+}
+
+record(bo, "$(P)START_CMD") {
+    field(DESC, "Start chopper (Modbus 'Run On' command)")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)start,0)UINT16")
     field(SIML, "$(P)SIM")
@@ -367,21 +779,93 @@ record(bo, "$(P)START") {
     field(SDIS, "$(P)DISABLE")
     field(ZNAM, "")
     field(ONAM, "START")
+	info(INTEREST, "LOW")
+    info(archive, "VAL")
 }   
 
-record(bo, "$(P)STOP") {
-    field(DESC, "Modbus run Off")
+# stop and delevitate rotor
+# not used as better to remain levitated (except for T0 homing routine)
+# set frequency to 0 instead (see below)
+record(bo, "$(P)STOP_IDLE") {
+    field(DESC, "Stop & delevitate chopper (Modbus 'Run Off' command)")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)stop,0)UINT16")
+    field(VAL, "1")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:STOP")
     field(SDIS, "$(P)DISABLE")
     field(ZNAM, "")
     field(ONAM, "STOP")
+	info(INTEREST, "LOW")
+    info(archive, "VAL")    
 }
 
-record(bo, "$(P)RESET") {
-    field(DESC, "Modbus Clear Alarms")
+record(seq, "$(P)STOP") {
+	field(DESC, "Chopper stop sequence")
+	field(DO1, "0")
+	field(LNK1, "$(P)STOP_CMD PP")
+	field(DLY2, "0.5")
+	field(DO2, "1")
+	field(LNK2, "$(P)STOP_CMD PP")
+	field(DLY3, "0.5")
+	field(DO3, "0")
+	field(LNK3, "$(P)STOP_CMD PP")
+	info(INTEREST, "HIGH")
+    info(archive, "VAL")    
+}
+
+record(bo, "$(P)STOP_CMD") {
+    field(DESC, "Stop Chopper")
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)_HOMEANGSTOP")
+    field(ZNAM, "")
+    field(ONAM, "STOP")
+    info(INTEREST, "MEDIUM")
+	info(archive, "VAL")    
+}
+
+# need to set HOMEANG to 330 before stopping
+# go to 330deg first for T0, but OK for other choppers.
+record(ao, "$(P)_HOMEANGSTOP") {
+    field(DESC, "Parking Angle 330")
+    field(DTYP, "Soft Channel")
+    field(OUT, "$(P)HOMEANG:SP PP")    
+    field(VAL, "330")
+    field(EGU, "degree")
+	field(PREC, 3)
+    field(FLNK, "$(P)_ZEROFREQ")
+	info(INTEREST, "LOW")
+    info(archive, "VAL")    
+} 
+
+# Sets frequency to 0 to leave rotor levitated
+record(ao, "$(P)_ZEROFREQ") {
+    field(DESC, "Set frequency to 0Hz")
+    field(DTYP, "Soft Channel")
+    field(OUT, "$(P)FREQ:SP PP")    
+    field(VAL, "0")
+    field(EGU, "Hz")
+	field(PREC, 3)
+	info(INTEREST, "LOW")
+    info(archive, "VAL")    
+} 
+
+record(seq, "$(P)RESET") {
+	field(DESC, "Chopper reset sequence")
+	field(DO1, "0")
+	field(LNK1, "$(P)RESET_CMD PP")
+	field(DLY2, "0.5")
+	field(DO2, "1")
+	field(LNK2, "$(P)RESET_CMD PP")
+	field(DLY3, "0.5")
+	field(DO3, "0")
+	field(LNK3, "$(P)RESET_CMD PP")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")    
+}
+
+record(bo, "$(P)RESET_CMD") {
+    field(DESC, "Reset warning and/or trip condition (Modbus 'Clear Alarms' command)")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)reset,0)UINT16")
     field(SIML, "$(P)SIM")
@@ -389,7 +873,59 @@ record(bo, "$(P)RESET") {
     field(SDIS, "$(P)DISABLE")
     field(ZNAM, "")
     field(ONAM, "RESET")
+	info(INTEREST, "LOW")
+    info(archive, "VAL")    
 }
+
+#--------------------------------------------------
+# Testing and diagnostics
+
+record(longin, "$(P)YEAR") {
+    field(DESC, "Year in Chopper Memory")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)ctime,0)UINT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:YEAR")
+    field(SDIS, "$(P)DISABLE")
+}   
+
+record(longin, "$(P)MONTH") {
+    field(DESC, "Month in Chopper Memory")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)ctime,1)UINT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MONTH")
+    field(SDIS, "$(P)DISABLE")
+}   
+
+record(longin, "$(P)DAY") {
+    field(DESC, "Day in Chopper Memory")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)ctime,2)UINT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:DAY")
+    field(SDIS, "$(P)DISABLE")
+}   
+
+record(longin, "$(P)TIME") {
+    field(DESC, "Seconds since Midnight")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)ctime,3)INT32_BE")
+    field(SCAN, "I/O Intr")
+    field(EGU, "s")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:TIME")
+    field(SDIS, "$(P)DISABLE")
+}   
+
+#--------------------------------------------------
+# Simulation
 
 record(bo, "$(P)SIM")
 {
@@ -454,6 +990,12 @@ record(ai, "$(P)SIM:HOMEANG")
     field(DTYP, "Soft Channel")
 }
 
+record(ai, "$(P)SIM:SHAFTANG")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
 record(longin, "$(P)SIM:SPEED")
 {
     field(SCAN, "Passive")
@@ -496,7 +1038,7 @@ record(ai, "$(P)SIM:READY")
     field(DTYP, "Soft Channel")
 }
 
-record(ai, "$(P)SIM:INSYNC")
+record(ai, "$(P)SIM:PHASE_ACC")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
