@@ -4,7 +4,7 @@
 # Name
 
 record(stringout, "$(P)NAME") {
-    field(DESC, "Name of Chopper (or which disk the controller is attached to)")
+    field(DESC, "Chopper/disk controller attached to")
     field(DTYP, "Soft Channel")
     field(VAL, "$(NAME)")
     info(INTEREST, "HIGH")
@@ -300,8 +300,9 @@ record(calc, "$(P)PARK:OK") {
     info(archive, "VAL")
 }
 
+# Park chopper OPEN or CLOSED (if PARK:OK true)
 record(calcout, "$(P)PARK") {
-	field(DESC, "Park chopper OPEN or CLOSED (if PARK:OK true)")
+	field(DESC, "Park chopper OPEN or CLOSED")
     field(SCAN, "Passive")
 	field(INPA, "$(P)PARK:OK")
     field(INPB, "$(P)PARK:POSN:SP.RVAL")
@@ -499,7 +500,7 @@ record(calcout, "$(P)_PHASCALC:SP") {
 
 # Write phase in nanoseconds
 record(longout, "$(P)_PHASNS:SP") {
-    field(DESC, "Reference Delay Setpoint (ns) (hardware)")
+    field(DESC, "Reference Delay Setpoint (hardware)")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)phasw,0)INT32_LE")
     field(EGU, "ns")
@@ -561,7 +562,7 @@ record(calcout, "$(P)_PHAS_ERRCALC:SP") {
 
 # Write phase in nanoseconds
 record(longout, "$(P)_PHAS_ERRNS:SP") {
-    field(DESC, "Veto Window Setpoint (ns) (hardware)")
+    field(DESC, "Veto Window Setpoint (hardware)")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)phaserrw,0)INT32_LE")
     field(EGU, "ns")
@@ -573,7 +574,7 @@ record(longout, "$(P)_PHAS_ERRNS:SP") {
 }  
 
 record(ai, "$(P)PHAS:DEG") {
-    field(DESC, "Reference Delay (deg)")
+    field(DESC, "Reference Delay")
     field(DTYP, "asynFloat64")
     field(INP, "@asyn($(CHOP)phasd,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
@@ -587,7 +588,7 @@ record(ai, "$(P)PHAS:DEG") {
 }   
 
 record(ao, "$(P)PHAS:DEG:SP") {
-    field(DESC, "Reference Delay Setpoint (deg)")
+    field(DESC, "Reference Delay Setpoint")
     field(DTYP, "asynFloat64")
     field(OUT, "@asyn($(CHOP)phasdw,0)FLOAT32_LE")
     field(EGU, "degree")
@@ -600,7 +601,7 @@ record(ao, "$(P)PHAS:DEG:SP") {
 }   
 
 record(ai, "$(P)PHAS_ERR:DEG") {
-    field(DESC, "Veto Window (deg)")
+    field(DESC, "Veto Window")
     field(DTYP, "asynFloat64")
     field(INP, "@asyn($(CHOP)phaserrd,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
@@ -614,7 +615,7 @@ record(ai, "$(P)PHAS_ERR:DEG") {
 }  
 
 record(ai, "$(P)PHASE_OK") {
-    field(DESC, "Phase OK (%)")
+    field(DESC, "Phase % OK")
     field(DTYP, "asynFloat64")
     field(INP, "@asyn($(CHOP)phaseok,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
@@ -629,7 +630,7 @@ record(ai, "$(P)PHASE_OK") {
 
 # Phase Accuracy in seconds
 record(ai, "$(P)_PHASE_ACC_S") {
-    field(DESC, "Phase Accuracy (s)")
+    field(DESC, "Phase Accuracy")
     field(DTYP, "asynFloat64")
     field(INP, "@asyn($(CHOP)phaseacc,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
@@ -645,7 +646,7 @@ record(ai, "$(P)_PHASE_ACC_S") {
 
 # Convert Phase Accuracy to microseconds
 record(calc, "$(P)PHASE_ACC") {
-	field(DESC, "Phase Accuracy (us)")
+	field(DESC, "Phase Accuracy")
     field(SCAN, "Passive")
 	field(INPA, "$(P)_PHASE_ACC_S")
 	field(CALC, "(A * 1000000)")
@@ -657,7 +658,7 @@ record(calc, "$(P)PHASE_ACC") {
 
 # Phase Repeatability in seconds
 record(ai, "$(P)_PHASE_REP_S") {
-    field(DESC, "Phase Repeatability (s)")
+    field(DESC, "Phase Repeatability")
     field(DTYP, "asynFloat64")
     field(INP, "@asyn($(CHOP)phaserep,0)FLOAT32_LE")
     field(SCAN, "I/O Intr")
@@ -689,7 +690,7 @@ record(calc, "$(P)PHASE_REP") {
 # Provides binary READY indicator based on state of controller.
 # If at least "Idle", then classed as ready to run.
 record(calcout, "$(P)_READY:CALC") {
-	field(DESC, "Controller Ready State Calculation")
+	field(DESC, "Controller Ready State Calc")
     field(SCAN, ".1 second")
 	field(INPA, "$(P)STATE.RVAL")
 	field(CALC, "(A >= 3)")
@@ -728,23 +729,20 @@ record(longin, "$(P)_VETO:COUNTS:PREV") {
    field(INP, "$(P)_VETO:CALC.A")
    field(EGU, "count")
    info(INTEREST, "LOW")
-   info(archive, "VAL")
 }
 
+# Compares current with previous VETO:COUNTS value
 record(calcout, "$(P)_VETO:CALC") {
-   field(DESC, "Compares current with previous VETO:COUNTS value")
    field(SCAN, ".5 second")
    field(INPA, "$(P)VETO:COUNTS")
    field(INPB, "$(P)_VETO:COUNTS:PREV")
    field(CALC, "A > B")
    field(OUT, "$(P)VETO PP")
    field(FLNK, "$(P)_VETO:COUNTS:PREV")
-   info(INTEREST, "LOW")
-   info(archive, "VAL")
 }
 
 record(bi, "$(P)VETO") {
-   field(DESC, "Indicates VETO:COUNTS increasing or not")
+   field(DESC, "Is VETO:COUNTS increasing or not")
    field(DTYP, "Soft Channel")
    field(ZNAM, "NOT INCREASING")
    field(ONAM, "INCREASING")
@@ -770,8 +768,9 @@ record(seq, "$(P)START") {
     info(archive, "VAL")    
 }
 
+# Start chopper
 record(bo, "$(P)START_CMD") {
-    field(DESC, "Start chopper (Modbus 'Run On' command)")
+    field(DESC, "Start chopper")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)start,0)UINT16")
     field(SIML, "$(P)SIM")
@@ -786,8 +785,9 @@ record(bo, "$(P)START_CMD") {
 # stop and delevitate rotor
 # not used as better to remain levitated (except for T0 homing routine)
 # set frequency to 0 instead (see below)
+# Stop & delevitate chopper (Modbus 'Run Off' command)
 record(bo, "$(P)STOP_IDLE") {
-    field(DESC, "Stop & delevitate chopper (Modbus 'Run Off' command)")
+    field(DESC, "Stop and delevitate chopper")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)stop,0)UINT16")
     field(VAL, "1")
@@ -864,8 +864,9 @@ record(seq, "$(P)RESET") {
 	info(archive, "VAL")    
 }
 
+# Reset warning and/or trip condition (Modbus 'Clear Alarms' command)
 record(bo, "$(P)RESET_CMD") {
-    field(DESC, "Reset warning and/or trip condition (Modbus 'Clear Alarms' command)")
+    field(DESC, "Reset warn and/or trip condition")
     field(DTYP, "asynInt32")
     field(OUT, "@asyn($(CHOP)reset,0)UINT16")
     field(SIML, "$(P)SIM")
