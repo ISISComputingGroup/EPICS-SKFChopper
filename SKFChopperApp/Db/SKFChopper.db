@@ -120,6 +120,7 @@ record(calc, "$(P)SHAFTANG") {
 	field(CALC, "(A / 100)")
     field(PREC, 2)
     field(EGU, "degree")
+    field(ASG, "READONLY")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
@@ -238,6 +239,7 @@ record(calc, "$(P)PARK:POSN:CALC") {
     field(INPB, "$(P)SHAFTANG:DIFF:CLS")
 	field(CALC, "A<1 ? 0 :(B<1 ? 1 : 2)")
     field(FLNK, "$(P)PARK:POSN:FWD")
+    field(ASG, "READONLY")
     info(INTEREST, "LOW")
 #    info(archive, "VAL")
 }
@@ -252,6 +254,7 @@ record(calcout, "$(P)PARK:POSN:FWD") {
     field(DOPT, "Use OCAL")
     field(OCAL, "B")
     field(OUT, "$(P)PARK:POSN PP")
+    field(ASG, "READONLY")
     info(INTEREST, "LOW")
 #    info(archive, "VAL")    
 }
@@ -296,6 +299,7 @@ record(calc, "$(P)PARK:OK") {
 # Following fields not applicable to CALC record (See comment above for explanation of values)
 #    field(ZNAM, "NO")
 #    field(ONAM, "YES")
+    field(ASG, "READONLY")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
@@ -311,6 +315,7 @@ record(calcout, "$(P)PARK") {
     field(OOPT, "When Non-zero")
     field(DOPT, "Use OCAL")
     field(OUT, "$(P)HOMEANG:SP PP")
+    field(ASG, "READONLY")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
 }
@@ -472,6 +477,7 @@ record(calc, "$(P)PHAS") {
 	field(CALC, "(A / 1000) + B")
     field(PREC, 3)
     field(EGU, "us")
+    field(ASG, "READONLY")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
@@ -494,6 +500,7 @@ record(calcout, "$(P)_PHASCALC:SP") {
     field(PREC, 0)
     field(EGU, "us")
     field(OUT, "$(P)_PHASNS:SP.VAL PP")
+    field(ASG, "READONLY")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
@@ -534,6 +541,7 @@ record(calc, "$(P)PHAS_ERR") {
 	field(CALC, "(A / 1000)")
     field(PREC, 3)
     field(EGU, "us")
+    field(ASG, "READONLY")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
@@ -556,6 +564,7 @@ record(calcout, "$(P)_PHAS_ERRCALC:SP") {
     field(PREC, 3)
     field(EGU, "us")
     field(OUT, "$(P)_PHAS_ERRNS:SP.VAL PP")
+    field(ASG, "READONLY")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
@@ -652,6 +661,7 @@ record(calc, "$(P)PHASE_ACC") {
 	field(CALC, "(A * 1000000)")
     field(PREC, 3)
     field(EGU, "us")
+    field(ASG, "READONLY")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
@@ -680,6 +690,7 @@ record(calc, "$(P)PHASE_REP") {
 	field(CALC, "(A * 1000000)")
     field(PREC, 3)
     field(EGU, "us")
+    field(ASG, "READONLY")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
@@ -695,6 +706,7 @@ record(calcout, "$(P)_READY:CALC") {
 	field(INPA, "$(P)STATE.RVAL")
 	field(CALC, "(A >= 3)")
     field(OUT, "$(P)READY PP")
+    field(ASG, "READONLY")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
 }
