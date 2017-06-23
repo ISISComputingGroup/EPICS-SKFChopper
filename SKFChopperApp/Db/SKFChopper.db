@@ -315,7 +315,6 @@ record(calcout, "$(P)PARK") {
     field(OOPT, "When Non-zero")
     field(DOPT, "Use OCAL")
     field(OUT, "$(P)HOMEANG:SP PP")
-    field(ASG, "READONLY")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
 }
@@ -500,7 +499,6 @@ record(calcout, "$(P)_PHASCALC:SP") {
     field(PREC, 0)
     field(EGU, "us")
     field(OUT, "$(P)_PHASNS:SP.VAL PP")
-    field(ASG, "READONLY")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
