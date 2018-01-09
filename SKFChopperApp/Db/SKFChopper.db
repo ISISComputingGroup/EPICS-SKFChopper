@@ -208,7 +208,7 @@ record(dfanout, "$(P)SHAFTANG:FAN") {
 # CALC multiplies/divides by 1000 not to lose decimals of difference
 record(calcout, "$(P)SHAFTANG:DIFF:OPN1") {
 	field(DESC, "Diff to OPEN pos - part 1")
-	field(INPB, "$(P)PARK:POSN:SP.ZRVL")
+	field(INPB, "$(OPEN)")
 	field(CALC, "((ABS(A-B)*1000)%(360*1000))/1000")
 	field(OUT, "$(P)SHAFTANG:DIFF:OPN.A PP")
 }
@@ -221,7 +221,7 @@ record(calc, "$(P)SHAFTANG:DIFF:OPN") {
 # CALC multiplies/divides by 1000 not to lose decimals of difference
 record(calcout, "$(P)SHAFTANG:DIFF:CLS1") {
 	field(DESC, "Diff to CLOSED pos - part 1")
-	field(INPB, "$(P)PARK:POSN:SP.ONVL")
+	field(INPB, "$(CLOSED)")
 	field(CALC, "((ABS(A-B)*1000)%(360*1000))/1000")
 	field(OUT, "$(P)SHAFTANG:DIFF:CLS.A PP")
 }
@@ -277,8 +277,8 @@ record(mbbo, "$(P)PARK:POSN:SP") {
     field(DTYP, "Soft Channel")
     field(ZRST, "OPEN")
 	field(ONST, "CLOSED")
-	field(ZRVL, "$(OPEN)")
-	field(ONVL, "$(CLOSED)")
+	field(ZRVL, "0")
+	field(ONVL, "1")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 } 
@@ -310,8 +310,10 @@ record(calcout, "$(P)PARK") {
     field(SCAN, "Passive")
 	field(INPA, "$(P)PARK:OK")
     field(INPB, "$(P)PARK:POSN:SP.RVAL")
-	field(CALC, "A = 1 ? 1 : 0")
-	field(OCAL, "B")
+    field(INPC, "$(OPEN)")
+    field(INPD, "$(CLOSED)")
+	field(CALC, "A")
+	field(OCAL, "B = 0 ? C : D")
     field(OOPT, "When Non-zero")
     field(DOPT, "Use OCAL")
     field(OUT, "$(P)HOMEANG:SP PP")
@@ -321,8 +323,8 @@ record(calcout, "$(P)PARK") {
 
 record(seq, "$(P)PARK_OPEN") {
 	field(DESC, "Park OPEN sequence")
-	field(DO1, "$(OPEN)")
-	field(LNK1, "$(P)PARK:POSN:SP.RVAL PP")
+	field(DO1, "0")
+	field(LNK1, "$(P)PARK:POSN:SP PP")
 	field(DLY2, "0.5")
 	field(DO2, "1")
 	field(LNK2, "$(P)PARK.PROC")
@@ -332,8 +334,8 @@ record(seq, "$(P)PARK_OPEN") {
 
 record(seq, "$(P)PARK_CLOSED") {
 	field(DESC, "Park CLOSED sequence")
-	field(DO1, "$(CLOSED)")
-	field(LNK1, "$(P)PARK:POSN:SP.RVAL PP")
+	field(DO1, "1")
+	field(LNK1, "$(P)PARK:POSN:SP PP")
 	field(DLY2, "0.5")
 	field(DO2, "1")
 	field(LNK2, "$(P)PARK.PROC")
@@ -349,8 +351,8 @@ record(seq, "$(P)PARK_OPEN_T0") {
     field(DO1, "1")
 	field(LNK1, "$(P)STOP_IDLE.PROC")
     field(DLY2, "1.0")
-    field(DO2, "$(OPEN)")
-	field(LNK2, "$(P)PARK:POSN:SP.RVAL PP")
+    field(DO2, "0")
+	field(LNK2, "$(P)PARK:POSN:SP PP")
 	field(DLY3, "0.5")
 	field(DO3, "1")
 	field(LNK3, "$(P)PARK.PROC")
@@ -364,8 +366,8 @@ record(seq, "$(P)PARK_CLOSED_T0") {
     field(DO1, "1")
 	field(LNK1, "$(P)STOP_IDLE.PROC")
     field(DLY2, "1.0")
-    field(DO2, "$(CLOSED)")
-	field(LNK2, "$(P)PARK:POSN:SP.RVAL PP")
+    field(DO2, "1")
+	field(LNK2, "$(P)PARK:POSN:SP PP")
 	field(DLY3, "0.5")
 	field(DO3, "1")
 	field(LNK3, "$(P)PARK.PROC")
