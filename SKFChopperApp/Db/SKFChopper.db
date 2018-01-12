@@ -20,7 +20,7 @@ record(mbbi, "$(P)STATE") {
     field(INP, "@asyn($(CHOP)state,0)UINT16")
     field(SCAN, "I/O Intr")
     field(SIML, "$(P)SIM")
-    field(SIOL, 0)
+    field(SIOL, "$(P)SIM:STATE")
 	field(ZRVL, 0)
 	field(ONVL, 1)
 	field(TWVL, 2)
@@ -105,7 +105,7 @@ record(longin, "$(P)_SHAFTANG100") {
     field(INP, "@asyn($(CHOP)shaftang,0)UINT16")
     field(SCAN, "I/O Intr")
     field(SIML, "$(P)SIM")
-#    field(SIOL, "$(P)SIM:SHAFTANG")
+    field(SIOL, "$(P)SIM:_SHAFTANG100")
     field(SDIS, "$(P)DISABLE")
     field(EGU, "degree")
     field(FLNK, "$(P)SHAFTANG")
@@ -940,12 +940,16 @@ record(longin, "$(P)TIME") {
 #--------------------------------------------------
 # Simulation
 
+# *** Asyn is not currently compatible with Simulation mode. ***
+# ***  However, code left in for future use. ***
+
 record(bo, "$(P)SIM")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
     field(ZNAM, "NO")
     field(ONAM, "YES")
+    field(VAL, "$(RECSIM=0)")
 }
 
 record(bo, "$(P)DISABLE") 
@@ -1003,10 +1007,11 @@ record(ai, "$(P)SIM:HOMEANG")
     field(DTYP, "Soft Channel")
 }
 
-record(ai, "$(P)SIM:SHAFTANG")
+record(longin, "$(P)SIM:_SHAFTANG100")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)_SHAFTANG100")
 }
 
 record(longin, "$(P)SIM:SPEED")
@@ -1079,4 +1084,36 @@ record(mbbiDirect, "$(P)SIM:_STATUS")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
+}
+
+
+record(mbbi, "$(P)SIM:STATE") {
+    field(DESC, "SIM System State")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+	field(ZRVL, 0)
+	field(ONVL, 1)
+	field(TWVL, 2)
+	field(THVL, 3)
+	field(FRVL, 4)
+	field(FVVL, 5)
+	field(SXVL, 6)
+	field(SVVL, 7)
+	field(EIVL, 8)
+	field(NIVL, 9)
+	field(TEVL, 10)
+	field(ELVL, 11)
+	field(ZRST, "Invalid")
+	field(ONST, "Power Up")
+	field(TWST, "Standby")
+	field(THST, "Idle")     
+	field(FRST, "Deleving")
+	field(FVST, "Levitating")
+	field(SXST, "Starting")
+	field(SVST, "Stopping")
+	field(EIST, "Coast")
+	field(NIST, "Rotation")
+	field(TEST, "Levitated")
+	field(ELST, "Rotating")
+    field(FLNK, "$(P)STATE")
 }
