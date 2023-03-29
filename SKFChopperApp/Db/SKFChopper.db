@@ -938,6 +938,79 @@ record(longin, "$(P)TIME") {
 }   
 
 #--------------------------------------------------
+# Peak Positions FSV. Used for diagnostics.
+
+# V13
+record(ai, "$(P)V13") {
+    field(DESC, "Peak Position FSV V13")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)v13,0)INT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "um")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:V13")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# W13
+record(ai, "$(P)W13") {
+    field(DESC, "Peak Position FSV W13")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)W13,0)INT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "um")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:W13")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# V24
+record(ai, "$(P)V24") {
+    field(DESC, "Peak Position FSV V24")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)V24,0)INT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "um")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:V24")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# W24
+record(ai, "$(P)W24") {
+    field(DESC, "Peak Position FSV W24")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)W24,0)INT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "um")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:W24")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# Z12
+record(ai, "$(P)Z12") {
+    field(DESC, "Peak Position FSV Z12")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)Z12,0)INT16")
+    field(SCAN, "I/O Intr")
+    field(EGU, "um")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:Z12")
+    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+#--------------------------------------------------
 # Simulation
 
 # *** Asyn is not currently compatible with Simulation mode. ***
@@ -1116,4 +1189,34 @@ record(mbbi, "$(P)SIM:STATE") {
 	field(TEST, "Levitated")
 	field(ELST, "Rotating")
     field(FLNK, "$(P)STATE")
+}
+
+record(ai, "$(P)SIM:V13")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:W13")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:V24")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:W24")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}
+
+record(ai, "$(P)SIM:Z12")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
 }
