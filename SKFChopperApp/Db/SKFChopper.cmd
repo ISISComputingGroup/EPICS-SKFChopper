@@ -31,11 +31,16 @@ drvModbusAsynConfigure("$(CHOP)shaftang", "$(CHOP)", 0, 3, 387, 1, 0, 1000, "SKF
 drvModbusAsynConfigure("$(CHOP)homeangsp", "$(CHOP)", 0, 3, 379, 2, 8, 1000, "SKF Chopper")
 drvModbusAsynConfigure("$(CHOP)homeangspw", "$(CHOP)", 0, 16, 379, 2, 8, 1, "SKF Chopper")
 drvModbusAsynConfigure("$(CHOP)status", "$(CHOP)", 0, 3, 478, 1, 0, 1000, "SKF Chopper")
-drvModbusAsynConfigure("$(CHOP)v13", "$(CHOP)", 0, 3, 910, 2, 4, 1000, "SKF Chopper")
-drvModbusAsynConfigure("$(CHOP)w13", "$(CHOP)", 0, 3, 911, 2, 4, 1000, "SKF Chopper")
-drvModbusAsynConfigure("$(CHOP)v24", "$(CHOP)", 0, 3, 912, 2, 4, 1000, "SKF Chopper")
-drvModbusAsynConfigure("$(CHOP)w24", "$(CHOP)", 0, 3, 913, 2, 4, 1000, "SKF Chopper")
-drvModbusAsynConfigure("$(CHOP)z12", "$(CHOP)", 0, 3, 914, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)v13_norm", "$(CHOP)", 0, 3, 905, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)w13_norm", "$(CHOP)", 0, 3, 906, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)v24_norm", "$(CHOP)", 0, 3, 907, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)w24_norm", "$(CHOP)", 0, 3, 908, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)z12_norm", "$(CHOP)", 0, 3, 909, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)v13_fsv", "$(CHOP)", 0, 3, 910, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)w13_fsv", "$(CHOP)", 0, 3, 911, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)v24_fsv", "$(CHOP)", 0, 3, 912, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)w24_fsv", "$(CHOP)", 0, 3, 913, 2, 4, 1000, "SKF Chopper")
+drvModbusAsynConfigure("$(CHOP)z12_fsv", "$(CHOP)", 0, 3, 914, 2, 4, 1000, "SKF Chopper")
 
 ## these are commands that need to send a 1 so have a readback frequency of 0 
 ## so they don't do a read on IOC startup and thus replace any 1 in the DB file with a 0

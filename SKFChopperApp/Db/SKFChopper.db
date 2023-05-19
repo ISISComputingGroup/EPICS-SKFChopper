@@ -937,75 +937,181 @@ record(longin, "$(P)TIME") {
     field(SDIS, "$(P)DISABLE")
 }   
 
-#--------------------------------------------------
-# Peak Positions FSV. Used for diagnostics.
+# Normalised peak positions.
+record(ai, "$(P)V13:NORM") {
+    field(DESC, "Normalised Peak Position V13")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)v13_norm,0)INT16")
+    field(SCAN, "I/O Intr")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
 
-# V13
-record(ai, "$(P)V13") {
+record(ai, "$(P)W13:NORM") {
+    field(DESC, "Normalised Peak Position W13")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)w13_norm,0)INT16")
+    field(SCAN, "I/O Intr")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)V24:NORM") {
+    field(DESC, "Normalised Peak Position V24")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)v24_norm,0)INT16")
+    field(SCAN, "I/O Intr")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)W24:NORM") {
+    field(DESC, "Normalised Peak Position W24")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)w24_norm,0)INT16")
+    field(SCAN, "I/O Intr")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)Z12:NORM") {
+    field(DESC, "Normalised Peak Position Z12")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(CHOP)z12_norm,0)INT16")
+    field(SCAN, "I/O Intr")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# Full scale peak positions.
+record(ai, "$(P)V13:FSV") {
     field(DESC, "Peak Position FSV V13")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)v13,0)INT16")
+    field(INP, "@asyn($(CHOP)v13_fsv,0)INT16")
     field(SCAN, "I/O Intr")
     field(EGU, "um")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:V13")
-    field(SDIS, "$(P)DISABLE")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
 
-# W13
-record(ai, "$(P)W13") {
+record(ai, "$(P)W13:FSV") {
     field(DESC, "Peak Position FSV W13")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)W13,0)INT16")
+    field(INP, "@asyn($(CHOP)w13_fsv,0)INT16")
     field(SCAN, "I/O Intr")
     field(EGU, "um")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:W13")
-    field(SDIS, "$(P)DISABLE")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
 
-# V24
-record(ai, "$(P)V24") {
+record(ai, "$(P)V24:FSV") {
     field(DESC, "Peak Position FSV V24")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)V24,0)INT16")
+    field(INP, "@asyn($(CHOP)v24_fsv,0)INT16")
     field(SCAN, "I/O Intr")
     field(EGU, "um")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:V24")
-    field(SDIS, "$(P)DISABLE")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
 
-# W24
-record(ai, "$(P)W24") {
+record(ai, "$(P)W24:FSV") {
     field(DESC, "Peak Position FSV W24")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)W24,0)INT16")
+    field(INP, "@asyn($(CHOP)w24_fsv,0)INT16")
     field(SCAN, "I/O Intr")
     field(EGU, "um")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:W24")
-    field(SDIS, "$(P)DISABLE")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
 
-# Z12
-record(ai, "$(P)Z12") {
+record(ai, "$(P)Z12:FSV") {
     field(DESC, "Peak Position FSV Z12")
     field(DTYP, "asynInt32")
-    field(INP, "@asyn($(CHOP)Z12,0)INT16")
+    field(INP, "@asyn($(CHOP)z12_fsv,0)INT16")
     field(SCAN, "I/O Intr")
     field(EGU, "um")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:Z12")
-    field(SDIS, "$(P)DISABLE")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+# Peak positions calc records.
+record(calc, "$(P)V13:CALC") {
+    field(DESC, "Peak position V13 Calc")
+    field(INPA, "$(P)V13:NORM CP MSS")
+    field(INPB, "$(P)V13:FSV CP MSS")
+    field(CALC, "((A+32767)/65534)*(2*B)-B")
+    field(EGU, "um")
+}
+
+record(calc, "$(P)W13:CALC") {
+    field(DESC, "Peak position W13 Calc")
+    field(INPA, "$(P)W13:NORM CP MSS")
+    field(INPB, "$(P)W13:FSV CP MSS")
+    field(CALC, "((A+32767)/65534)*(2*B)-B")
+    field(EGU, "um")
+}
+
+record(calc, "$(P)V24:CALC") {
+    field(DESC, "Peak position V24 Calc")
+    field(INPA, "$(P)V24:NORM CP MSS")
+    field(INPB, "$(P)V24:FSV CP MSS")
+    field(CALC, "((A+32767)/65534)*(2*B)-B")
+    field(EGU, "um")
+}
+
+record(calc, "$(P)W24:CALC") {
+    field(DESC, "Peak position W24 Calc")
+    field(INPA, "$(P)W24:NORM CP MSS")
+    field(INPB, "$(P)W24:FSV CP MSS")
+    field(CALC, "((A+32767)/65534)*(2*B)-B")
+    field(EGU, "um")
+}
+
+record(calc, "$(P)Z12:CALC") {
+    field(DESC, "Peak position Z12 Calc")
+    field(INPA, "$(P)Z12:NORM CP MSS")
+    field(INPB, "$(P)Z12:FSV CP MSS")
+    field(CALC, "((A+32767)/65534)*(2*B)-B")
+    field(EGU, "um")
+}
+
+# Peak positions in engineering units.
+record(ai, "$(P)V13") {
+    field(DESC, "Peak position V13")
+    field(INP, "$(P)V13:CALC CP MSS")
+    field(EGU, "um")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)W13") {
+    field(DESC, "Peak position W13")
+    field(INP, "$(P)W13:CALC CP MSS")
+    field(EGU, "um")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)V24") {
+    field(DESC, "Peak position V24")
+    field(INP, "$(P)V24:CALC CP MSS")
+    field(EGU, "um")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)W24") {
+    field(DESC, "Peak position W24")
+    field(INP, "$(P)W24:CALC CP MSS")
+    field(EGU, "um")
+    info(INTEREST, "LOW")
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)Z12") {
+    field(DESC, "Peak position Z12")
+    field(INP, "$(P)Z12:CALC CP MSS")
+    field(EGU, "um")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
@@ -1189,34 +1295,4 @@ record(mbbi, "$(P)SIM:STATE") {
 	field(TEST, "Levitated")
 	field(ELST, "Rotating")
     field(FLNK, "$(P)STATE")
-}
-
-record(ai, "$(P)SIM:V13")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-}
-
-record(ai, "$(P)SIM:W13")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-}
-
-record(ai, "$(P)SIM:V24")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-}
-
-record(ai, "$(P)SIM:W24")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-}
-
-record(ai, "$(P)SIM:Z12")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
 }
