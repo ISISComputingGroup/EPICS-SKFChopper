@@ -1,0 +1,9 @@
+file $(TOP)/SKFChopperApp/peak_positions.template
+{
+	pattern { P, CHOP, POS, CMD_NORM, CMD_FSV }
+	{ "\$(P)", "\$(CHOP)", "V13", "v13_norm", "v13_fsv" }
+    { "\$(P)", "\$(CHOP)", "W13", "w13_norm", "w13_fsv" }
+    { "\$(P)", "\$(CHOP)", "V24", "v24_norm", "v24_fsv" }
+    { "\$(P)", "\$(CHOP)", "W24", "w24_norm", "w24_fsv" }
+    { "\$(P)", "\$(CHOP)", "Z12", "z12_norm", "z12_fsv" }
+}

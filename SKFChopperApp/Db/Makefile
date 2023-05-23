@@ -11,6 +11,7 @@ include $(TOP)/configure/CONFIG
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
 DB += SKFChopper.db
+DB += peak_positions.db
 DATA += SKFChopper.cmd
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
