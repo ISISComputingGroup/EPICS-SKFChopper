@@ -2,6 +2,7 @@ record(ai, "$(P)$(POS):NORM") {
     field(DESC, "Normalised Peak Position $(POS)")
     field(DTYP, "asynInt32")
     field(INP, "@asyn($(CHOP)$(CMD_NORM),0)INT16")
+    field(EGU, "")
     field(SCAN, "I/O Intr")
     info(INTEREST, "LOW")
     info(archive, "VAL")
