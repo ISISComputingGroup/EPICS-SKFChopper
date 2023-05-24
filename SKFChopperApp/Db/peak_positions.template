@@ -18,6 +18,7 @@ record(ai, "$(P)$(POS):FSV") {
 }
 
 record(calc, "$(P)$(POS):CALC") {
+    field(ASG, "READONLY")
     field(DESC, "Peak position $(POS) Calc")
     field(INPA, "$(P)$(POS):NORM CP MSS")
     field(INPB, "$(P)$(POS):FSV CP MSS")
