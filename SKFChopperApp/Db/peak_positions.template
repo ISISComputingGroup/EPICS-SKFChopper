@@ -5,7 +5,7 @@ record(ai, "$(P)$(POS):NORM") {
     field(EGU, "")
     field(SCAN, "I/O Intr")
     info(INTEREST, "LOW")
-    info(archive, "VAL")
+    info(archive, "60.0 VAL")
 }
 
 record(ai, "$(P)$(POS):FSV") {
@@ -15,7 +15,7 @@ record(ai, "$(P)$(POS):FSV") {
     field(SCAN, "I/O Intr")
     field(EGU, "um")
     info(INTEREST, "LOW")
-    info(archive, "VAL")
+    info(archive, "60.0 VAL")
 }
 
 record(calc, "$(P)$(POS):CALC") {
@@ -32,5 +32,5 @@ record(ai, "$(P)$(POS)") {
     field(INP, "$(P)$(POS):CALC CP MSS")
     field(EGU, "um")
     info(INTEREST, "LOW")
-    info(archive, "VAL")
+    info(archive, "60.0 VAL")
 }
