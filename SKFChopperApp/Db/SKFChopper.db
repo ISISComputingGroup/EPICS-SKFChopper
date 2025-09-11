@@ -109,6 +109,7 @@ record(longin, "$(P)_SHAFTANG100") {
     field(SDIS, "$(P)DISABLE")
     field(EGU, "degree")
     field(FLNK, "$(P)SHAFTANG")
+	field(ADEL, "50")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }
@@ -121,6 +122,7 @@ record(calc, "$(P)SHAFTANG") {
     field(PREC, 2)
     field(EGU, "degree")
     field(ASG, "READONLY")
+	field(ADEL, "0.5")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
@@ -419,6 +421,7 @@ record(longin, "$(P)SPEED") {
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:SPEED")
     field(SDIS, "$(P)DISABLE")
+	field(ADEL, "2")
     info(INTEREST, "MEDIUM")
     info(archive, "VAL")
 }   
@@ -433,6 +436,7 @@ record(ai, "$(P)FREQ") {
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:FREQ")
     field(SDIS, "$(P)DISABLE")
+	field(ADEL, "0.01")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }   
@@ -464,6 +468,7 @@ record(longin, "$(P)_PHASNS") {
     field(SIOL, "$(P)SIM:PHAS")
     field(SDIS, "$(P)DISABLE")
     field(FLNK, "$(P)PHAS")
+	field(ADEL, "100")
     info(INTEREST, "LOW")
     info(archive, "VAL")
 }   
@@ -479,6 +484,7 @@ record(calc, "$(P)PHAS") {
     field(PREC, 3)
     field(EGU, "us")
     field(ASG, "READONLY")
+	field(ADEL, "0.1")
     info(INTEREST, "HIGH")
     info(archive, "VAL")
 }
