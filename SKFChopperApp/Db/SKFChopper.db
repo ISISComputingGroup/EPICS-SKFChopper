@@ -109,9 +109,8 @@ record(longin, "$(P)_SHAFTANG100") {
     field(SDIS, "$(P)DISABLE")
     field(EGU, "degree")
     field(FLNK, "$(P)SHAFTANG")
-	field(ADEL, "50")
     info(INTEREST, "LOW")
-    info(archive, "VAL")
+    info(archive, "30.0 VAL")
 }
 
 record(calc, "$(P)SHAFTANG") {
@@ -122,9 +121,8 @@ record(calc, "$(P)SHAFTANG") {
     field(PREC, 2)
     field(EGU, "degree")
     field(ASG, "READONLY")
-	field(ADEL, "0.5")
     info(INTEREST, "HIGH")
-    info(archive, "VAL")
+    info(archive, "30.0 VAL")
 }
 
 #--------------------------------------------------
